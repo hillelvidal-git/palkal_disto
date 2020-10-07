@@ -1,0 +1,41 @@
+C:\Users\HILLEL\Dropbox\תכנות\WideField\BL\bin\Debug\BL.dll.config
+C:\Users\HILLEL\Dropbox\תכנות\WideField\BL\bin\Debug\BL.dll
+C:\Users\HILLEL\Dropbox\תכנות\WideField\BL\bin\Debug\BL.pdb
+C:\Users\HILLEL\Dropbox\תכנות\WideField\BL\bin\Debug\TpsAdapter.dll
+C:\Users\HILLEL\Dropbox\תכנות\WideField\BL\bin\Debug\TpsAdapter.pdb
+C:\Users\HILLEL\Dropbox\תכנות\WideField\BL\obj\Debug\WideFieldBL.Properties.Resources.resources
+C:\Users\HILLEL\Dropbox\תכנות\WideField\BL\obj\Debug\BL.dll
+C:\Users\HILLEL\Dropbox\תכנות\WideField\BL\obj\Debug\BL.pdb
+C:\Users\HILLEL\Dropbox\תכנות\WideField\BL\obj\Debug\WideFieldBL.csprojResolveAssemblyReference.cache
+C:\Users\HILLEL\Dropbox\תכנות\WideField\BL\obj\Debug\WideFieldBL.csproj.GenerateResource.Cache
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\BL\bin\Debug\BL.dll.config
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\BL\bin\Debug\BL.dll
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\BL\bin\Debug\BL.pdb
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\BL\bin\Debug\TpsAdapter.dll
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\BL\bin\Debug\TpsAdapter.pdb
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\BL\obj\Debug\WideFieldBL.Properties.Resources.resources
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\BL\obj\Debug\WideFieldBL.csproj.GenerateResource.Cache
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\BL\obj\Debug\BL.dll
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\BL\obj\Debug\BL.pdb
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\BL\bin\Debug\BL.dll.config
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\BL\bin\Debug\BL.dll
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\BL\bin\Debug\BL.pdb
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\BL\bin\Debug\TpsAdapter.dll
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\BL\bin\Debug\TpsAdapter.pdb
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\BL\obj\Debug\WideFieldBL.csprojResolveAssemblyReference.cache
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\BL\obj\Debug\WideFieldBL.Properties.Resources.resources
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\BL\obj\Debug\WideFieldBL.csproj.GenerateResource.Cache
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\BL\obj\Debug\BL.dll
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\BL\obj\Debug\BL.pdb
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\bin\Debug\BL.dll.config
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\bin\Debug\BL.dll
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\bin\Debug\BL.pdb
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\bin\Debug\TpsAdapter.dll
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\bin\Debug\TpsAdapter.pdb
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\obj\Debug\WideFieldBL.csprojAssemblyReference.cache
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\obj\Debug\WideFieldBL.Properties.Resources.resources
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\obj\Debug\WideFieldBL.csproj.GenerateResource.cache
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\obj\Debug\WideFieldBL.csproj.CoreCompileInputs.cache
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\obj\Debug\WideFieldBL.csproj.CopyComplete
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\obj\Debug\BL.dll
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\obj\Debug\BL.pdb

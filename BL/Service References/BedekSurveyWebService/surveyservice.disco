@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://www.bedek-online.co.il/webservices/surveyservice.asmx?wsdl" docRef="http://www.bedek-online.co.il/webservices/surveyservice.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://www.bedek-online.co.il/webservices/surveyservice.asmx" xmlns:q1="http://bedek-online.co.il/" binding="q1:SurveyServiceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://www.bedek-online.co.il/webservices/surveyservice.asmx" xmlns:q2="http://bedek-online.co.il/" binding="q2:SurveyServiceSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

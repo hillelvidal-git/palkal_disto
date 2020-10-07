@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://bedek-online.co.il/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://bedek-online.co.il/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://bedek-online.co.il/">
+      <s:element name="TryIt">
+        <s:complexType />
+      </s:element>
+      <s:element name="TryItResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TryItResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetProjectsTree">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetProjectsTreeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetProjectsTreeResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="TreeText" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddNewProblem">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="tableName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="itemId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="problemDescription" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="reporter" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddNewProblemResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="AddNewProblemResult" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="newId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="TryItSoapIn">
+    <wsdl:part name="parameters" element="tns:TryIt" />
+  </wsdl:message>
+  <wsdl:message name="TryItSoapOut">
+    <wsdl:part name="parameters" element="tns:TryItResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetProjectsTreeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetProjectsTree" />
+  </wsdl:message>
+  <wsdl:message name="GetProjectsTreeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetProjectsTreeResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddNewProblemSoapIn">
+    <wsdl:part name="parameters" element="tns:AddNewProblem" />
+  </wsdl:message>
+  <wsdl:message name="AddNewProblemSoapOut">
+    <wsdl:part name="parameters" element="tns:AddNewProblemResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ManageServiceSoap">
+    <wsdl:operation name="TryIt">
+      <wsdl:input message="tns:TryItSoapIn" />
+      <wsdl:output message="tns:TryItSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectsTree">
+      <wsdl:input message="tns:GetProjectsTreeSoapIn" />
+      <wsdl:output message="tns:GetProjectsTreeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddNewProblem">
+      <wsdl:input message="tns:AddNewProblemSoapIn" />
+      <wsdl:output message="tns:AddNewProblemSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ManageServiceSoap" type="tns:ManageServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TryIt">
+      <soap:operation soapAction="http://bedek-online.co.il/TryIt" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectsTree">
+      <soap:operation soapAction="http://bedek-online.co.il/GetProjectsTree" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddNewProblem">
+      <soap:operation soapAction="http://bedek-online.co.il/AddNewProblem" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ManageServiceSoap12" type="tns:ManageServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TryIt">
+      <soap12:operation soapAction="http://bedek-online.co.il/TryIt" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectsTree">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetProjectsTree" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddNewProblem">
+      <soap12:operation soapAction="http://bedek-online.co.il/AddNewProblem" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ManageService">
+    <wsdl:port name="ManageServiceSoap" binding="tns:ManageServiceSoap">
+      <soap:address location="http://www.bedek-online.co.il/webservices/manageservice.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ManageServiceSoap12" binding="tns:ManageServiceSoap12">
+      <soap12:address location="http://www.bedek-online.co.il/webservices/manageservice.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

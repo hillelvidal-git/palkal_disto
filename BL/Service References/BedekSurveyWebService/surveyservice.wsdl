@@ -1,0 +1,1232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://bedek-online.co.il/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://bedek-online.co.il/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://bedek-online.co.il/">
+      <s:element name="TryIt">
+        <s:complexType />
+      </s:element>
+      <s:element name="TryItResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TryItResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertNewSurvey">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="surveyLines" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="InsertNewSurveyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="InsertNewSurveyResult" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="newId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertNewPoint">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ptNum" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="lineId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="position" type="tns:ArrayOfDouble" />
+            <s:element minOccurs="1" maxOccurs="1" name="ptDetail" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="statusId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="problem" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDouble">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="double" type="s:double" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="InsertNewPointResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="InsertNewPointResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="newId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertNewMeasurements">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="values" type="tns:ArrayOfAnyType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfAnyType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="anyType" nillable="true" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="InsertNewMeasurementsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="InsertNewMeasurementsResult" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="newId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNewSurveys">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="levelId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="fromDate" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfInt">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="int" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetNewSurveysResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetNewSurveysResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="news" type="tns:ArrayOfInt" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateStakeout">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="points" type="tns:ArrayOfArrayOfInt" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfArrayOfInt">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ArrayOfInt" nillable="true" type="tns:ArrayOfInt" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="UpdateStakeoutResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateStakeoutResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNewMeasurements">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="levelId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="fromDate" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNewMeasurementsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetNewMeasurementsResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="news" type="tns:ArrayOfInt" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllNewMeasurements">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="fromDate" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllNewMeasurementsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetAllNewMeasurementsResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="news" type="tns:ArrayOfInt" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNewPoints">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="levelId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="fromDate" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNewPointsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetNewPointsResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="news" type="tns:ArrayOfInt" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllNewSurveys">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="fromDate" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllNewSurveysResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetAllNewSurveysResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="news" type="tns:ArrayOfInt" />
+            <s:element minOccurs="1" maxOccurs="1" name="serverTime" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSurvey">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="surveyId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfArrayOfDouble">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ArrayOfDouble" nillable="true" type="tns:ArrayOfDouble" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetSurveyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetSurveyResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="details" type="tns:ArrayOfAnyType" />
+            <s:element minOccurs="0" maxOccurs="1" name="samples" type="tns:ArrayOfArrayOfDouble" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMeasurement">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="mesureId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMeasurementResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetMeasurementResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="values" type="tns:ArrayOfAnyType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPoint">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="pointId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPointResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetPointResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="values" type="tns:ArrayOfAnyType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateSurveyDetails">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="surveyId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="attribute" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="value" />
+            <s:element minOccurs="1" maxOccurs="1" name="type" type="tns:SqlDbType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="SqlDbType">
+        <s:restriction base="s:string">
+          <s:enumeration value="BigInt" />
+          <s:enumeration value="Binary" />
+          <s:enumeration value="Bit" />
+          <s:enumeration value="Char" />
+          <s:enumeration value="DateTime" />
+          <s:enumeration value="Decimal" />
+          <s:enumeration value="Float" />
+          <s:enumeration value="Image" />
+          <s:enumeration value="Int" />
+          <s:enumeration value="Money" />
+          <s:enumeration value="NChar" />
+          <s:enumeration value="NText" />
+          <s:enumeration value="NVarChar" />
+          <s:enumeration value="Real" />
+          <s:enumeration value="UniqueIdentifier" />
+          <s:enumeration value="SmallDateTime" />
+          <s:enumeration value="SmallInt" />
+          <s:enumeration value="SmallMoney" />
+          <s:enumeration value="Text" />
+          <s:enumeration value="Timestamp" />
+          <s:enumeration value="TinyInt" />
+          <s:enumeration value="VarBinary" />
+          <s:enumeration value="VarChar" />
+          <s:enumeration value="Variant" />
+          <s:enumeration value="Xml" />
+          <s:enumeration value="Udt" />
+          <s:enumeration value="Structured" />
+          <s:enumeration value="Date" />
+          <s:enumeration value="Time" />
+          <s:enumeration value="DateTime2" />
+          <s:enumeration value="DateTimeOffset" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="UpdateSurveyDetailsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateSurveyDetailsResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetServerTime">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetServerTimeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetServerTimeResult" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBorePosition">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="attribution" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="boreName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ptClass" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBorePositionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetBorePositionResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="position" type="tns:ArrayOfDouble" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetProjectByLevel">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="levelId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetProjectByLevelResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetProjectByLevelResult" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="projectId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="projectName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetProjectDetails">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="projectId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfArrayOfAnyType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ArrayOfAnyType" nillable="true" type="tns:ArrayOfAnyType" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetProjectDetailsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetProjectDetailsResult" type="tns:ArrayOfArrayOfAnyType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLevelBlocs">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="levelId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLevelBlocsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetLevelBlocsResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="blocs" type="tns:ArrayOfArrayOfAnyType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLevelName">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="levelId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLevelNameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetLevelNameResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="levelName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLineId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="intName" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="fieldId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLineIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetLineIdResult" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="lineId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFieldId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="blocId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFieldIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetFieldIdResult" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="fieldId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertNewLine">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="intName" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="fieldId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertNewLineResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="InsertNewLineResult" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="lineId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertNewField">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="blocId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertNewFieldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="InsertNewFieldResult" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="fieldId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdatePointStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ptId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="statusId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdatePointStatusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdatePointStatusResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdatePointDetailId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ptId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="detailId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdatePointDetailIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdatePointDetailIdResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="TryItSoapIn">
+    <wsdl:part name="parameters" element="tns:TryIt" />
+  </wsdl:message>
+  <wsdl:message name="TryItSoapOut">
+    <wsdl:part name="parameters" element="tns:TryItResponse" />
+  </wsdl:message>
+  <wsdl:message name="InsertNewSurveySoapIn">
+    <wsdl:part name="parameters" element="tns:InsertNewSurvey" />
+  </wsdl:message>
+  <wsdl:message name="InsertNewSurveySoapOut">
+    <wsdl:part name="parameters" element="tns:InsertNewSurveyResponse" />
+  </wsdl:message>
+  <wsdl:message name="InsertNewPointSoapIn">
+    <wsdl:part name="parameters" element="tns:InsertNewPoint" />
+  </wsdl:message>
+  <wsdl:message name="InsertNewPointSoapOut">
+    <wsdl:part name="parameters" element="tns:InsertNewPointResponse" />
+  </wsdl:message>
+  <wsdl:message name="InsertNewMeasurementsSoapIn">
+    <wsdl:part name="parameters" element="tns:InsertNewMeasurements" />
+  </wsdl:message>
+  <wsdl:message name="InsertNewMeasurementsSoapOut">
+    <wsdl:part name="parameters" element="tns:InsertNewMeasurementsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetNewSurveysSoapIn">
+    <wsdl:part name="parameters" element="tns:GetNewSurveys" />
+  </wsdl:message>
+  <wsdl:message name="GetNewSurveysSoapOut">
+    <wsdl:part name="parameters" element="tns:GetNewSurveysResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateStakeoutSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateStakeout" />
+  </wsdl:message>
+  <wsdl:message name="UpdateStakeoutSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateStakeoutResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetNewMeasurementsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetNewMeasurements" />
+  </wsdl:message>
+  <wsdl:message name="GetNewMeasurementsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetNewMeasurementsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllNewMeasurementsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllNewMeasurements" />
+  </wsdl:message>
+  <wsdl:message name="GetAllNewMeasurementsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllNewMeasurementsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetNewPointsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetNewPoints" />
+  </wsdl:message>
+  <wsdl:message name="GetNewPointsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetNewPointsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllNewSurveysSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllNewSurveys" />
+  </wsdl:message>
+  <wsdl:message name="GetAllNewSurveysSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllNewSurveysResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSurveySoapIn">
+    <wsdl:part name="parameters" element="tns:GetSurvey" />
+  </wsdl:message>
+  <wsdl:message name="GetSurveySoapOut">
+    <wsdl:part name="parameters" element="tns:GetSurveyResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMeasurementSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMeasurement" />
+  </wsdl:message>
+  <wsdl:message name="GetMeasurementSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMeasurementResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPointSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPoint" />
+  </wsdl:message>
+  <wsdl:message name="GetPointSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPointResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateSurveyDetailsSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateSurveyDetails" />
+  </wsdl:message>
+  <wsdl:message name="UpdateSurveyDetailsSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateSurveyDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetServerTimeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetServerTime" />
+  </wsdl:message>
+  <wsdl:message name="GetServerTimeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetServerTimeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBorePositionSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBorePosition" />
+  </wsdl:message>
+  <wsdl:message name="GetBorePositionSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBorePositionResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetProjectByLevelSoapIn">
+    <wsdl:part name="parameters" element="tns:GetProjectByLevel" />
+  </wsdl:message>
+  <wsdl:message name="GetProjectByLevelSoapOut">
+    <wsdl:part name="parameters" element="tns:GetProjectByLevelResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetProjectDetailsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetProjectDetails" />
+  </wsdl:message>
+  <wsdl:message name="GetProjectDetailsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetProjectDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLevelBlocsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLevelBlocs" />
+  </wsdl:message>
+  <wsdl:message name="GetLevelBlocsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLevelBlocsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLevelNameSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLevelName" />
+  </wsdl:message>
+  <wsdl:message name="GetLevelNameSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLevelNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLineIdSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLineId" />
+  </wsdl:message>
+  <wsdl:message name="GetLineIdSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLineIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFieldIdSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFieldId" />
+  </wsdl:message>
+  <wsdl:message name="GetFieldIdSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFieldIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="InsertNewLineSoapIn">
+    <wsdl:part name="parameters" element="tns:InsertNewLine" />
+  </wsdl:message>
+  <wsdl:message name="InsertNewLineSoapOut">
+    <wsdl:part name="parameters" element="tns:InsertNewLineResponse" />
+  </wsdl:message>
+  <wsdl:message name="InsertNewFieldSoapIn">
+    <wsdl:part name="parameters" element="tns:InsertNewField" />
+  </wsdl:message>
+  <wsdl:message name="InsertNewFieldSoapOut">
+    <wsdl:part name="parameters" element="tns:InsertNewFieldResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePointStatusSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdatePointStatus" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePointStatusSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdatePointStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePointDetailIdSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdatePointDetailId" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePointDetailIdSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdatePointDetailIdResponse" />
+  </wsdl:message>
+  <wsdl:portType name="SurveyServiceSoap">
+    <wsdl:operation name="TryIt">
+      <wsdl:input message="tns:TryItSoapIn" />
+      <wsdl:output message="tns:TryItSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewSurvey">
+      <wsdl:input message="tns:InsertNewSurveySoapIn" />
+      <wsdl:output message="tns:InsertNewSurveySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewPoint">
+      <wsdl:input message="tns:InsertNewPointSoapIn" />
+      <wsdl:output message="tns:InsertNewPointSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewMeasurements">
+      <wsdl:input message="tns:InsertNewMeasurementsSoapIn" />
+      <wsdl:output message="tns:InsertNewMeasurementsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNewSurveys">
+      <wsdl:input message="tns:GetNewSurveysSoapIn" />
+      <wsdl:output message="tns:GetNewSurveysSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateStakeout">
+      <wsdl:input message="tns:UpdateStakeoutSoapIn" />
+      <wsdl:output message="tns:UpdateStakeoutSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNewMeasurements">
+      <wsdl:input message="tns:GetNewMeasurementsSoapIn" />
+      <wsdl:output message="tns:GetNewMeasurementsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllNewMeasurements">
+      <wsdl:input message="tns:GetAllNewMeasurementsSoapIn" />
+      <wsdl:output message="tns:GetAllNewMeasurementsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNewPoints">
+      <wsdl:input message="tns:GetNewPointsSoapIn" />
+      <wsdl:output message="tns:GetNewPointsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllNewSurveys">
+      <wsdl:input message="tns:GetAllNewSurveysSoapIn" />
+      <wsdl:output message="tns:GetAllNewSurveysSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSurvey">
+      <wsdl:input message="tns:GetSurveySoapIn" />
+      <wsdl:output message="tns:GetSurveySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMeasurement">
+      <wsdl:input message="tns:GetMeasurementSoapIn" />
+      <wsdl:output message="tns:GetMeasurementSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPoint">
+      <wsdl:input message="tns:GetPointSoapIn" />
+      <wsdl:output message="tns:GetPointSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSurveyDetails">
+      <wsdl:input message="tns:UpdateSurveyDetailsSoapIn" />
+      <wsdl:output message="tns:UpdateSurveyDetailsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetServerTime">
+      <wsdl:input message="tns:GetServerTimeSoapIn" />
+      <wsdl:output message="tns:GetServerTimeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBorePosition">
+      <wsdl:input message="tns:GetBorePositionSoapIn" />
+      <wsdl:output message="tns:GetBorePositionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectByLevel">
+      <wsdl:input message="tns:GetProjectByLevelSoapIn" />
+      <wsdl:output message="tns:GetProjectByLevelSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectDetails">
+      <wsdl:input message="tns:GetProjectDetailsSoapIn" />
+      <wsdl:output message="tns:GetProjectDetailsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLevelBlocs">
+      <wsdl:input message="tns:GetLevelBlocsSoapIn" />
+      <wsdl:output message="tns:GetLevelBlocsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLevelName">
+      <wsdl:input message="tns:GetLevelNameSoapIn" />
+      <wsdl:output message="tns:GetLevelNameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLineId">
+      <wsdl:input message="tns:GetLineIdSoapIn" />
+      <wsdl:output message="tns:GetLineIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFieldId">
+      <wsdl:input message="tns:GetFieldIdSoapIn" />
+      <wsdl:output message="tns:GetFieldIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewLine">
+      <wsdl:input message="tns:InsertNewLineSoapIn" />
+      <wsdl:output message="tns:InsertNewLineSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewField">
+      <wsdl:input message="tns:InsertNewFieldSoapIn" />
+      <wsdl:output message="tns:InsertNewFieldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePointStatus">
+      <wsdl:input message="tns:UpdatePointStatusSoapIn" />
+      <wsdl:output message="tns:UpdatePointStatusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePointDetailId">
+      <wsdl:input message="tns:UpdatePointDetailIdSoapIn" />
+      <wsdl:output message="tns:UpdatePointDetailIdSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SurveyServiceSoap" type="tns:SurveyServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TryIt">
+      <soap:operation soapAction="http://bedek-online.co.il/TryIt" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewSurvey">
+      <soap:operation soapAction="http://bedek-online.co.il/InsertNewSurvey" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewPoint">
+      <soap:operation soapAction="http://bedek-online.co.il/InsertNewPoint" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewMeasurements">
+      <soap:operation soapAction="http://bedek-online.co.il/InsertNewMeasurements" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNewSurveys">
+      <soap:operation soapAction="http://bedek-online.co.il/GetNewSurveys" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateStakeout">
+      <soap:operation soapAction="http://bedek-online.co.il/UpdateStakeout" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNewMeasurements">
+      <soap:operation soapAction="http://bedek-online.co.il/GetNewMeasurements" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllNewMeasurements">
+      <soap:operation soapAction="http://bedek-online.co.il/GetAllNewMeasurements" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNewPoints">
+      <soap:operation soapAction="http://bedek-online.co.il/GetNewPoints" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllNewSurveys">
+      <soap:operation soapAction="http://bedek-online.co.il/GetAllNewSurveys" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSurvey">
+      <soap:operation soapAction="http://bedek-online.co.il/GetSurvey" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMeasurement">
+      <soap:operation soapAction="http://bedek-online.co.il/GetMeasurement" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPoint">
+      <soap:operation soapAction="http://bedek-online.co.il/GetPoint" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSurveyDetails">
+      <soap:operation soapAction="http://bedek-online.co.il/UpdateSurveyDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetServerTime">
+      <soap:operation soapAction="http://bedek-online.co.il/GetServerTime" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBorePosition">
+      <soap:operation soapAction="http://bedek-online.co.il/GetBorePosition" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectByLevel">
+      <soap:operation soapAction="http://bedek-online.co.il/GetProjectByLevel" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectDetails">
+      <soap:operation soapAction="http://bedek-online.co.il/GetProjectDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLevelBlocs">
+      <soap:operation soapAction="http://bedek-online.co.il/GetLevelBlocs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLevelName">
+      <soap:operation soapAction="http://bedek-online.co.il/GetLevelName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLineId">
+      <soap:operation soapAction="http://bedek-online.co.il/GetLineId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFieldId">
+      <soap:operation soapAction="http://bedek-online.co.il/GetFieldId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewLine">
+      <soap:operation soapAction="http://bedek-online.co.il/InsertNewLine" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewField">
+      <soap:operation soapAction="http://bedek-online.co.il/InsertNewField" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePointStatus">
+      <soap:operation soapAction="http://bedek-online.co.il/UpdatePointStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePointDetailId">
+      <soap:operation soapAction="http://bedek-online.co.il/UpdatePointDetailId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SurveyServiceSoap12" type="tns:SurveyServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TryIt">
+      <soap12:operation soapAction="http://bedek-online.co.il/TryIt" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewSurvey">
+      <soap12:operation soapAction="http://bedek-online.co.il/InsertNewSurvey" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewPoint">
+      <soap12:operation soapAction="http://bedek-online.co.il/InsertNewPoint" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewMeasurements">
+      <soap12:operation soapAction="http://bedek-online.co.il/InsertNewMeasurements" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNewSurveys">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetNewSurveys" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateStakeout">
+      <soap12:operation soapAction="http://bedek-online.co.il/UpdateStakeout" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNewMeasurements">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetNewMeasurements" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllNewMeasurements">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetAllNewMeasurements" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNewPoints">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetNewPoints" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllNewSurveys">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetAllNewSurveys" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSurvey">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetSurvey" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMeasurement">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetMeasurement" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPoint">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetPoint" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSurveyDetails">
+      <soap12:operation soapAction="http://bedek-online.co.il/UpdateSurveyDetails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetServerTime">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetServerTime" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBorePosition">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetBorePosition" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectByLevel">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetProjectByLevel" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectDetails">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetProjectDetails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLevelBlocs">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetLevelBlocs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLevelName">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetLevelName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLineId">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetLineId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFieldId">
+      <soap12:operation soapAction="http://bedek-online.co.il/GetFieldId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewLine">
+      <soap12:operation soapAction="http://bedek-online.co.il/InsertNewLine" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertNewField">
+      <soap12:operation soapAction="http://bedek-online.co.il/InsertNewField" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePointStatus">
+      <soap12:operation soapAction="http://bedek-online.co.il/UpdatePointStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePointDetailId">
+      <soap12:operation soapAction="http://bedek-online.co.il/UpdatePointDetailId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SurveyService">
+    <wsdl:port name="SurveyServiceSoap" binding="tns:SurveyServiceSoap">
+      <soap:address location="http://www.bedek-online.co.il/webservices/surveyservice.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SurveyServiceSoap12" binding="tns:SurveyServiceSoap12">
+      <soap12:address location="http://www.bedek-online.co.il/webservices/surveyservice.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

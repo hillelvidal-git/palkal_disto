@@ -1,0 +1,24 @@
+c:\users\hillel\documents\תכנות\WideField\TpsAdapter\bin\Debug\TpsAdapter.dll
+c:\users\hillel\documents\תכנות\WideField\TpsAdapter\bin\Debug\TpsAdapter.pdb
+c:\users\hillel\documents\תכנות\WideField\TpsAdapter\obj\Debug\ResolveAssemblyReference.cache
+c:\users\hillel\documents\תכנות\WideField\TpsAdapter\obj\Debug\TpsAdapter.dll
+c:\users\hillel\documents\תכנות\WideField\TpsAdapter\obj\Debug\TpsAdapter.pdb
+C:\Users\HILLEL\Dropbox\תכנות\WideField\TpsAdapter\bin\Debug\TpsAdapter.dll
+C:\Users\HILLEL\Dropbox\תכנות\WideField\TpsAdapter\bin\Debug\TpsAdapter.pdb
+C:\Users\HILLEL\Dropbox\תכנות\WideField\TpsAdapter\obj\Debug\TpsAdapter.dll
+C:\Users\HILLEL\Dropbox\תכנות\WideField\TpsAdapter\obj\Debug\TpsAdapter.pdb
+C:\Users\HILLEL\Dropbox\תכנות\WideField\TpsAdapter\obj\Debug\TpsAdapter.csprojResolveAssemblyReference.cache
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\TpsAdapter\bin\Debug\TpsAdapter.dll
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\TpsAdapter\bin\Debug\TpsAdapter.pdb
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\TpsAdapter\obj\Debug\TpsAdapter.csprojResolveAssemblyReference.cache
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\TpsAdapter\obj\Debug\TpsAdapter.dll
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\TpsAdapter\obj\Debug\TpsAdapter.pdb
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\TpsAdapter\bin\Debug\TpsAdapter.dll
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\TpsAdapter\bin\Debug\TpsAdapter.pdb
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\TpsAdapter\obj\Debug\TpsAdapter.dll
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\TpsAdapter\obj\Debug\TpsAdapter.pdb
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\TpsAdapter\bin\Debug\TpsAdapter.dll
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\TpsAdapter\bin\Debug\TpsAdapter.pdb
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\TpsAdapter\obj\Debug\TpsAdapter.csproj.CoreCompileInputs.cache
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\TpsAdapter\obj\Debug\TpsAdapter.dll
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\TpsAdapter\obj\Debug\TpsAdapter.pdb

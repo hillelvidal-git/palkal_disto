@@ -1,0 +1,90 @@
+c:\users\hillel\documents\תכנות\WideField\WideField\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\hillel\documents\תכנות\WideField\WideField\obj\x86\Debug\WideField.Properties.Resources.resources
+c:\users\hillel\documents\תכנות\WideField\WideField\obj\x86\Debug\WideField.MainForm.resources
+c:\users\hillel\documents\תכנות\WideField\WideField\bin\Debug\WideField.exe
+c:\users\hillel\documents\תכנות\WideField\WideField\bin\Debug\WideField.pdb
+c:\users\hillel\documents\תכנות\WideField\WideField\bin\Debug\BL.dll
+c:\users\hillel\documents\תכנות\WideField\WideField\bin\Debug\TpsAdapter.dll
+c:\users\hillel\documents\תכנות\WideField\WideField\bin\Debug\BL.pdb
+c:\users\hillel\documents\תכנות\WideField\WideField\bin\Debug\TpsAdapter.pdb
+c:\users\hillel\documents\תכנות\WideField\WideField\obj\x86\Debug\WideField.exe
+c:\users\hillel\documents\תכנות\WideField\WideField\obj\x86\Debug\WideField.pdb
+c:\users\hillel\documents\תכנות\WideField\WideField\obj\x86\Debug\WideField.AddNew.resources
+C:\Users\HILLEL\Documents\תכנות\WideField\WideField\obj\x86\Debug\WideField.ProjectAlert.resources
+C:\Users\HILLEL\Documents\תכנות\WideField\WideField\obj\x86\Debug\WideField.LocatingWizard.resources
+C:\Users\HILLEL\Documents\תכנות\WideField\WideField\obj\x86\Debug\WideField.wizphaseControl.resources
+C:\Users\HILLEL\Documents\תכנות\WideField\WideField\obj\x86\Debug\WideField.EnsureLevelForm.resources
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\bin\Debug\WideField.exe.config
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\bin\Debug\WideField.exe
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\bin\Debug\WideField.pdb
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\bin\Debug\BedekTreeAdapter.dll
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\bin\Debug\BedekTreeAdapter.pdb
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\obj\x86\Debug\LogForm.LogForm.resources
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\obj\x86\Debug\WideField.MainForm.resources
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\obj\x86\Debug\WideField.ProjectAlert.resources
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\obj\x86\Debug\WideField.Properties.Resources.resources
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\obj\x86\Debug\WideField.SyncWizard.resources
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\obj\x86\Debug\WideField.exe
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\obj\x86\Debug\WideField.pdb
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\bin\Debug\TpsAdapter.dll
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\bin\Debug\BL.pdb
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\bin\Debug\TpsAdapter.pdb
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\obj\x86\Debug\WideField.ConflictsForm.resources
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\bin\Debug\BL.dll
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\obj\x86\Debug\WideField.csprojResolveAssemblyReference.cache
+C:\Users\HILLEL\Dropbox\תכנות\WideField\WideField\obj\x86\Debug\WideField.csproj.GenerateResource.Cache
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\bin\Debug\WideField.exe.config
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.exe
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.pdb
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\bin\Debug\WideField.exe
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\bin\Debug\WideField.pdb
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\bin\Debug\BL.dll
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\bin\Debug\TpsAdapter.dll
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\bin\Debug\BL.pdb
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\bin\Debug\TpsAdapter.pdb
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.csprojResolveAssemblyReference.cache
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.ConflictsForm.resources
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\obj\x86\Debug\LogForm.LogForm.resources
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.MainForm.resources
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.ProjectAlert.resources
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.Properties.Resources.resources
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.SyncWizard.resources
+C:\Users\Hillel\Documents\Visual Studio 2013\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.csproj.GenerateResource.Cache
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\bin\Debug\WideField.exe.config
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.exe
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.pdb
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\bin\Debug\WideField.exe
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\bin\Debug\WideField.pdb
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\bin\Debug\BL.dll
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\bin\Debug\TpsAdapter.dll
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\bin\Debug\BL.pdb
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\bin\Debug\TpsAdapter.pdb
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.csprojResolveAssemblyReference.cache
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.ConflictsForm.resources
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\obj\x86\Debug\LogForm.LogForm.resources
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.MainForm.resources
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.ProjectAlert.resources
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.Properties.Resources.resources
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.SyncWizard.resources
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\obj\x86\Debug\WideField.csproj.GenerateResource.Cache
+C:\Users\Hillel\OneDrive\Projects\WideField\WideField\WideField\bin\Debug\Newtonsoft.Json.dll
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\bin\Debug\WideField.exe.config
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\bin\Debug\WideField.exe
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\bin\Debug\WideField.pdb
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\bin\Debug\BL.dll
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\bin\Debug\TpsAdapter.dll
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\bin\Debug\BL.pdb
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\bin\Debug\BL.dll.config
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\bin\Debug\TpsAdapter.pdb
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.csprojAssemblyReference.cache
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.ConflictsForm.resources
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\LogForm.LogForm.resources
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.MainForm.resources
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.ProjectAlert.resources
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.Properties.Resources.resources
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.SyncWizard.resources
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.csproj.GenerateResource.cache
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.csproj.CoreCompileInputs.cache
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.csproj.CopyComplete
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.exe
+C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.pdb

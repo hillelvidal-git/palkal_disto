@@ -1349,7 +1349,7 @@ namespace WideField
             //ליתר בטחון, הפסק את תהליך בקידת המצב, למקרה שהוא עדין פעיל
             try
             {
-                this.checkProcess.Kill();
+                this.checkProcess?.Kill();
                 //this.activiewClient.Stop();
             }
             catch { }

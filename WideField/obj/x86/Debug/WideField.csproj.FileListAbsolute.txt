@@ -88,6 +88,16 @@ C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideFiel
 C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.csproj.CopyComplete
 C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.exe
 C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\WideField\obj\x86\Debug\WideField.pdb
+C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\GeoComS2K.dll
+C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\GeoComWrap32.dll
+C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\GeoComWrap32.pdb
+C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\gpsvc.dll
+C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\msvcp100d.dll
+C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\msvcr100d.dll
+C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\GeoComS2K.lib
+C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\GeoComWrap32.exp
+C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\GeoComWrap32.ilk
+C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\GeoComWrap32.lib
 C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\WideField.exe.config
 C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\WideField.exe
 C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\WideField.pdb

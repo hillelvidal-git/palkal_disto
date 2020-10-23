@@ -14,11 +14,13 @@ namespace TpsAdapter
         //public const string AppPath = @"C:\Program Fiels\WideField";
         //const string DllsPath = @"\Dlls";
 
-        public const string AppPath = @"C:\";
-        const string DllsPath = @"";
+        //public const string AppPath = @"C:\";
 
-        const string WrapperPath = AppPath + DllsPath + @"\GeoComWrap32.dll";
-        
+        //const string DllsPath = @"";
+
+        //const string WrapperPath = AppPath + DllsPath + @"\GeoComWrap32.dll";
+        const string WrapperPath ="GeoComWrap32.dll";
+
         [DllImport(WrapperPath, EntryPoint = "hv_COM_Init")]
         public static extern short hv_COM_Init();
 

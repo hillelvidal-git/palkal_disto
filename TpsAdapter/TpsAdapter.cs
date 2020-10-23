@@ -18,6 +18,7 @@ namespace TpsAdapter
         public TpsAdapter()
         {
             //אתחול התקשורת
+            Console.WriteLine("dll path: " + WrapperPath);
             nLastResponse = hv_COM_Init();
             short wait = 2; //2 seconds for communication timeout
             hv_COM_SetTimeOut(out wait);

@@ -1,0 +1,8 @@
+C:\Users\user\source\repos\palkal_disto\tps_data\bin\Debug\netstandard2.0\tps_data.deps.json
+C:\Users\user\source\repos\palkal_disto\tps_data\bin\Debug\netstandard2.0\tps_data.dll
+C:\Users\user\source\repos\palkal_disto\tps_data\bin\Debug\netstandard2.0\tps_data.pdb
+C:\Users\user\source\repos\palkal_disto\tps_data\obj\Debug\netstandard2.0\tps_data.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\palkal_disto\tps_data\obj\Debug\netstandard2.0\tps_data.AssemblyInfo.cs
+C:\Users\user\source\repos\palkal_disto\tps_data\obj\Debug\netstandard2.0\tps_data.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\palkal_disto\tps_data\obj\Debug\netstandard2.0\tps_data.dll
+C:\Users\user\source\repos\palkal_disto\tps_data\obj\Debug\netstandard2.0\tps_data.pdb

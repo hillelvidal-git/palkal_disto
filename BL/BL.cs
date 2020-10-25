@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
+using System.Timers;
 
 namespace WideFieldBL
 {
@@ -21,14 +22,18 @@ namespace WideFieldBL
 
     public class BL
     {
-        private TpsAdapter.TpsAdapter GeoComServer = new TpsAdapter.TpsAdapter();
+        private TpsAdapter.TpsAdapter tps;
         public double StakeoutStartZ = -1;
         public bool StopPlay = false;
         private string lastDsitomatCOM;
         public bool bTpsTilted;
         FilesAdapter filesTool;
-
+        
         public int[] CurrentAttribution;
+
+        DateTime tpsLastAlive;
+
+        public Action actTpsAlive;
 
         //דגל שמציין האם המכשיר מחובר
         public bool bTpsConnected;
@@ -38,8 +43,26 @@ namespace WideFieldBL
         private ToolStripLabel tsPrompt;
         private ToolStripProgressBar tsProgress;
 
-        public BL(ToolStripLabel label, ToolStripProgressBar prgBar)
+        short tpsBatteryVoltage;
+        string tps_port;
+
+        System.Timers.Timer timerCheckTps;
+
+        public Action<string> actTpsReturned;
+
+        public BL(string tpsport, ToolStripLabel label, ToolStripProgressBar prgBar)
         {
+            tps_port = tpsport;
+
+            // Create a timer with a two second interval.
+            timerCheckTps = new System.Timers.Timer(5000);
+            // Hook up the Elapsed event for the timer. 
+            timerCheckTps.Elapsed += OnTimedEvent;
+            timerCheckTps.AutoReset = true;
+            //timerCheckTps.Enabled = true;
+
+            StartTps();
+
             this.CurrentAttribution = new int[] { -1, -1, -1, -1 };
             this.tsPrompt = label;
             this.tsProgress = prgBar;
@@ -47,11 +70,76 @@ namespace WideFieldBL
             this.filesTool = new FilesAdapter();
         }
 
+        private void OnTimedEvent(object sender, ElapsedEventArgs e)
+        {
+            timerCheckTps.Stop();
+            if (IsTpsAlive())
+            {
+
+            }
+            else
+            {
+                if (!(tps is null))
+                {
+                    StopTps();
+                }
+
+                ConnectTps(true, tps_port);
+            }
+            timerCheckTps.Start();
+        }
+
+        private void StartTps()
+        {
+            tps = new TpsAdapter.TpsAdapter();
+            tps.actAlive += tpsAlive;
+            tps.actBattery += tpsBattery;
+            tps.actReturned += tpsReturned;
+        }
+
+        private void tpsReturned(string obj)
+        {
+            actTpsReturned?.Invoke(obj);
+        }
+
+        ~BL()
+        {
+            StopTps();
+        }
+
+        private void tpsBattery(short v)
+        {
+            tpsBatteryVoltage = v;
+        }
+
+        private void tpsAlive(DateTime t)
+        {
+            tpsLastAlive = t;
+            actTpsAlive?.Invoke();
+        }
+
+        public bool IsTpsAlive(out int diff)
+        {
+            DateTime now = DateTime.Now;
+            var diffInSeconds = (now - tpsLastAlive).TotalSeconds;
+            diff = (int) diffInSeconds;
+            return diffInSeconds < 5;
+        }
+
+        public bool IsTpsAlive()
+        {
+            DateTime now = DateTime.Now;
+            var diffInSeconds = (now - tpsLastAlive).TotalSeconds;
+            
+            return diffInSeconds < 5;
+        }
+
+
         public void ConnectTps(bool conncet, string PortName)
         {
             if (!conncet) //אם זו בקשה להתנתק
             {
-                GeoComServer.DisconnectTps();
+                tps.DisconnectTps();
                 this.bTpsConnected = false;
                 tsPrompt.Text = "מנותק";
                 PortName = "";
@@ -60,9 +148,13 @@ namespace WideFieldBL
 
             //אם זו בקשה להתחבר
 
+            //if (tps is null) 
+                StartTps();
+
             string DistomatPort = "";
             string strPortName;
             //List<string> Ports = GetPortsNames(this.lastDsitomatCOM);
+            //Ports.Insert(0, PortName);
             List<string> Ports = new List<string>() { PortName };
 
             foreach (string port in Ports)
@@ -73,12 +165,13 @@ namespace WideFieldBL
 
                 try
                 {
-                    if (GeoComServer.ConnectTps(Convert.ToInt16(strPortName), 115200, 1))
+                    if (tps.ConnectTps(Convert.ToInt16(strPortName), 115200, 1))
                     {
                         //החיבור עם היציאה הצליח
                         DistomatPort = strPortName;
                         this.bTpsConnected = true;
                         tsPrompt.Text = "החיבור הצליח";
+                        tps.Run();
                         break;
                     }
                 }
@@ -97,6 +190,7 @@ namespace WideFieldBL
             {
                 PortName = DistomatPort;
                 this.lastDsitomatCOM = DistomatPort;
+                
             }
 
         }
@@ -127,8 +221,9 @@ namespace WideFieldBL
             if (!this.bTpsConnected) //אם החיבור מנותק
                 return false;
 
-            return GeoComServer.RedLaserSwitch(on);
+            return tps.RedLaserSwitch(on);
         }
+
 
         public bool DoMeasure(bool HighAccruacy, bool UsePrism, out double[] pt)
         {
@@ -146,24 +241,13 @@ namespace WideFieldBL
             }
 
             DateTime PointTime;
-            return GeoComServer.DoMeasure(HighAccruacy, UsePrism, out pt, out PointTime);
+            return tps.DoMeasure(HighAccruacy, UsePrism, out pt, out PointTime);
         }
 
         public bool AutoTargetSwitch(bool on)
         {
             tsPrompt.Text = "מחפש מטרה...";
-            return GeoComServer.AutoTargetSwitch(on);
-        }
-
-        public bool TrackingSwitch(bool on)
-        {
-            if (AutoTargetSwitch(on)) //אם נמצאה מטרה
-            {
-                tsPrompt.Text = "מטרה נמצאה, נועל...";
-                return GeoComServer.LockOnPrism(on);
-            }
-            else
-                return false;
+            return tps.AutoTargetSwitch(on);
         }
 
         public bool FindPoint(string ptName, double[] XYZ, bool IsSlope, double dPercision, out double finalZ, int ExclusiveMethod, bool MeasureStartZ, out TimeSpan duration)
@@ -201,7 +285,7 @@ namespace WideFieldBL
             {
                 double[] startZpoint;
                 tsPrompt.Text = "מודד גובה ראשוני...";
-                if (GeoComServer.DoMeasure(false, false, out startZpoint, out ptime))
+                if (tps.DoMeasure(false, false, out startZpoint, out ptime))
                     XYZ[2] = startZpoint[2];
                 else
                     return false; //מדידת נקודת גובה לא הצליחה
@@ -227,22 +311,22 @@ namespace WideFieldBL
 
                 tsPrompt.Text = "נקודה  " + ptName + ": >ניסיון " + tries.ToString() + "< מחשב...";
                 //חישוב הזוויות לנקודה
-                GeoComServer.GetRelativePosition(XYZ, out HorizontalAngle, out VerticalAngle);
+                tps.GetRelativePosition(XYZ, out HorizontalAngle, out VerticalAngle);
 
                 //ביצוע הצבעה
                 tsPrompt.Text = "נקודה  " + ptName + ": ניסיון " + tries.ToString() + ": נוסע לנקודה...";
-                if (!GeoComServer.PointAt(HorizontalAngle, VerticalAngle))
+                if (!tps.PointAt(HorizontalAngle, VerticalAngle))
                     return false; //ההצבעה נכשלה
 
                 //מדידת הנקודה בפועל
                 tsPrompt.Text = "נקודה  " + ptName + ": ניסיון " + tries.ToString() + ": מודד נקודה...";
-                if (!GeoComServer.DoMeasure(false, false, out actualXYZ, out ptime))
+                if (!tps.DoMeasure(false, false, out actualXYZ, out ptime))
                     return false; //המדידה נכשלה
 
                 Z_Vals += "\n" + actualXYZ[2].ToString("0.0000");
 
                 //חישוב המרחק האופקי מהנקודה המקורית
-                XYgap = GeoComServer.GetHorizontalGap(XYZ, actualXYZ);
+                XYgap = tps.GetHorizontalGap(XYZ, actualXYZ);
                 Gap_Vals += "\n" + XYgap.ToString("0.0000");
 
                 //בדיקה האם הדיוק הושג
@@ -325,6 +409,11 @@ namespace WideFieldBL
             return PointFound;
         }
 
+        public void cmdRedLaser(bool on)
+        {
+            tps?.cmdRedLaser(on);
+        }
+
         private double GetXyDist(double[] XYZ, double[] p)
         {
             return Math.Sqrt(Math.Pow((XYZ[0] - p[0]), 2) + Math.Pow((XYZ[1] - p[1]), 2));
@@ -341,6 +430,11 @@ namespace WideFieldBL
 
             PLANE = new double[] { VP[0], VP[1], VP[2], d }; //וקטור מקדמי המישור
             return PLANE;
+        }
+
+        public void cmdMeasure(bool usePrism)
+        {
+            tps?.cmdMeasure(usePrism);
         }
 
         private double GetZByPlane(double[] P0, double[] PLANE)
@@ -385,21 +479,22 @@ namespace WideFieldBL
             return z;
         }
 
-        public void CheckStatus(out short capacity, out bool tilted, out double[] TiltVals)
+        public void CheckStatus(out short voltage, out bool tilted, out double[] TiltVals)
         {
-            GeoComServer.GetBatteryPower(out capacity); //מצב הסוללה
-            tilted = GeoComServer.TpsTilted(0.0001, out TiltVals); //מצב הפלס
+            //GeoComServer.GetBatteryPower(out capacity); //מצב הסוללה
+            voltage = tpsBatteryVoltage;
+            tilted = tps.TpsTilted(0.0001, out TiltVals); //מצב הפלס
             return;
         }
 
         public void GetAngles(out double[] angles)
         {
-            GeoComServer.GetCurrentAngles(out angles);
+            tps.GetCurrentAngles(out angles);
         }
 
         public void UpdateStation()
         {
-            GeoComServer.ImportStation();
+            tps.ImportStation();
         }
 
         /// <summary>
@@ -439,7 +534,7 @@ namespace WideFieldBL
             }
 
             //בצע מדידת מרחק וזויות
-            if (!GeoComServer.GetDistAndAngles(UsePrism, true, out target.SlopeDistance, out target.HzAngle, out target.VAngle))
+            if (!tps.GetDistAndAngles(UsePrism, true, out target.SlopeDistance, out target.HzAngle, out target.VAngle))
                 return false;
             //הערה חשובה: הזוית הנשמרת היא כבר לאחר המרה למערכת הצירים הרגילה שלנו ולא במערכת הדיסטומט, שם הזויות הפוכות
 
@@ -487,6 +582,11 @@ namespace WideFieldBL
             Station[2] = ((t1.Position[2] + t2.Position[2]) - (t1.VDist + t2.VDist)) / 2;
 
             return true;
+        }
+
+        public void cmdSetPrismTrack(bool on)
+        {
+            tps?.cmdSetPrismTrack(on);
         }
 
         public bool FindIntersecOf2Circles(double[] P0, double r0, double[] P1, double r1, double ang, bool ShortWayCCW, double MaxGap, out double StationX, out double StationY)
@@ -659,7 +759,7 @@ namespace WideFieldBL
                 return false;
 
             //אם נתקבל אישור - קבע את התחנה
-            if (!GeoComServer.SetStation(MeanStation))
+            if (!tps.SetStation(MeanStation))
                 return false;
 
             //קבע את הכיוון
@@ -674,7 +774,7 @@ namespace WideFieldBL
             //חשוב מאוד - תיקון הפרש הזיויות המחושב, מכיון שבדיסטומט הכיוון הוא הפוך כלומר עם כיוון השעון
             AnglesDifference = 0 - AnglesDifference;
 
-            GeoComServer.GetCurrentAngles(out angs);
+            tps.GetCurrentAngles(out angs);
             //הזוית הנוכחית כפי שנמדדת במכשיר
             double OldCurrentAngle = angs[0];
             //תיקון הזוית הנוכחית כך שתתאים לחישוב התחנה החדשה
@@ -682,7 +782,7 @@ namespace WideFieldBL
             if (NewCurrentAngle < 0)
                 NewCurrentAngle += Math.PI * 2;
 
-            if (!GeoComServer.SetOrientation(NewCurrentAngle))
+            if (!tps.SetOrientation(NewCurrentAngle))
                 return false;
 
             //שמור את ערכי התחנה להצגה בממשק
@@ -733,7 +833,7 @@ namespace WideFieldBL
         {
             try
             {
-                pt = GeoComServer.MeasureBore(diameter);
+                pt = tps.MeasureBore(diameter);
                 return true;
             }
             catch
@@ -742,28 +842,20 @@ namespace WideFieldBL
                 return false;
             }
         }
-
-        public void PointAtAngles(double hz, double v)
-        {
-            //ביצוע הצבעה
-            if (!GeoComServer.PointAt(hz, v))
-                tsPrompt.Text = "ההצבעה נכשלה";
-        }
         
         public void PointAt(double[] XYZ)
         {
             //חישוב הזוויות לנקודה
             double HorizontalAngle, VerticalAngle;
-            GeoComServer.GetRelativePosition(XYZ, out HorizontalAngle, out VerticalAngle);
+            tps.GetRelativePosition(XYZ, out HorizontalAngle, out VerticalAngle);
 
             //ביצוע הצבעה
-            if (!GeoComServer.PointAt(HorizontalAngle, VerticalAngle))
-                tsPrompt.Text = "ההצבעה נכשלה";
+            tps.PointAt(HorizontalAngle, VerticalAngle);
         }
 
         public bool SetStationByValues(double[] XYZ, double orientaionAngle)
         {
-            return GeoComServer.SetStation(XYZ) && GeoComServer.SetOrientation(orientaionAngle);
+            return tps.SetStation(XYZ) && tps.SetOrientation(orientaionAngle);
         }
 
         public bool GetLevelPoints(int levelId, out DbPoint[] points)
@@ -791,14 +883,14 @@ namespace WideFieldBL
 
         }
 
-        public void TpsBeepNormal()
+        public void cmdTpsBeepNormal()
         {
-            GeoComServer.BeepAlarm();
+            tps.cmdBeepAlarm();
         }
 
         public double[] GetStation()
         {
-            return GeoComServer.GetStation();
+            return tps.GetStation();
         }
 
         public bool Locate(List<TargetData> targets)
@@ -818,7 +910,7 @@ namespace WideFieldBL
                 double angCorrection = lc.GetAngleCorrection(newSt, targets);
 
                 //קבע את התחנה
-                if (!GeoComServer.SetStation(newSt.Position))
+                if (!tps.SetStation(newSt.Position))
                 {
                     MessageBox.Show("Station Not Set!");
                     return false;
@@ -829,7 +921,7 @@ namespace WideFieldBL
 
                 double[] angs;
                 //הזוית הנוכחית כפי שנמדדת במכשיר
-                GeoComServer.GetCurrentAngles(out angs);
+                tps.GetCurrentAngles(out angs);
                 double OldCurrentAngle = angs[0];
 
                 lc.log.Add("");
@@ -866,7 +958,7 @@ namespace WideFieldBL
                     NewCurrentAngle -= Math.PI * 2;
                 lc.log.Add("Converted To Distomat System: " + NewCurrentAngle.ToString("0.00000"));
 
-                if (!GeoComServer.SetOrientation(NewCurrentAngle))
+                if (!tps.SetOrientation(NewCurrentAngle))
                 {
                     MessageBox.Show("Angle Not Set!");
                     return false;
@@ -1085,6 +1177,31 @@ namespace WideFieldBL
         public bool UpdateStakout(List<int[]> pts, out string msg)
         {
             return filesTool.UpdateStakout(pts, out msg);
+        }
+
+        public void StopTps()
+        {
+            try
+            {
+                if (!(tps is null))
+                {
+                    tps.Stop();
+                    tps.actAlive -= tpsAlive;
+                    tps.actBattery -= tpsBattery;
+                    tps = null;
+                }
+            }
+            catch { }
+        }
+
+        public void cmdPointAt(double[] xyz)
+        {
+            //חישוב הזוויות לנקודה
+            double HorizontalAngle, VerticalAngle;
+            tps.GetRelativePosition(xyz, out HorizontalAngle, out VerticalAngle);
+
+            //ביצוע הצבעה
+            tps.cmdPointAt(HorizontalAngle, VerticalAngle);
         }
     }
 }

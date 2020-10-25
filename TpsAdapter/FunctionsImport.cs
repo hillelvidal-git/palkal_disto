@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using GeoComTypes;
 using System.Threading;
-
+using Newtonsoft.Json;
 
 namespace TpsAdapter
 {
@@ -19,7 +19,7 @@ namespace TpsAdapter
         //const string DllsPath = @"";
 
         //const string WrapperPath = AppPath + DllsPath + @"\GeoComWrap32.dll";
-        const string WrapperPath ="GeoComWrap32.dll";
+        const string WrapperPath = "GeoComWrap32.dll";
 
         [DllImport(WrapperPath, EntryPoint = "hv_COM_Init")]
         public static extern short hv_COM_Init();
@@ -175,8 +175,123 @@ namespace TpsAdapter
         [DllImport(WrapperPath, EntryPoint = "PASS_GetSlopeDist")]
         public static extern double PASS_GetSlopeDist();
 
+        public Action<string> actReturned;
 
+        public void cmdRedLaser(bool on)
+        {
+            commandList.Add(() =>
+            {
+                ON_OFF_TYPE state = on ? ON_OFF_TYPE.ON : ON_OFF_TYPE.OFF;
+                nLastResponse = hv_EDM_Laserpointer(state);
+                //actReturned?.Invoke(new { cmd = "laser", val = on, res = nLastResponse});
+                string json = @"{cmd : 'laser', val: '" + on.ToString() + "', res: " + nLastResponse + ", point: [] }";
+                actReturned?.Invoke(json);
+            });
+        }
+
+        public void cmdBeepAlarm()
+        {
+            commandList.Add(() =>
+            {
+                hv_BMM_BeepAlarm();
+            });
+        }
+
+        public void cmdMeasure(bool usePrism)
+        {
+            commandList.Add(() =>
+            {
+                string json;
+                nLastResponse = usePrism ? hv_TMC_SetEdmMode(EDM_MODE.EDM_SINGLE_STANDARD) : hv_TMC_SetEdmMode(EDM_MODE.EDM_SINGLE_SRANGE);
+
+                if (usePrism)
+                {
+                    nLastResponse = hv_AUS_SetUserLockState(ON_OFF_TYPE.ON);
+                    nLastResponse = hv_AUT_FineAdjust(this.SearchRangeHz, this.SearchRangeV, BOOLE.FALSE);
+                    if (nLastResponse != 0)
+                    {
+                        //actReturned?.Invoke(new { cmd = "measure", val = "prism failed", res = nLastResponse });
+                        json = @"{cmd : 'measure', val: 'prism failed', res: " + nLastResponse + ", point: [] }";
+                        actReturned?.Invoke(json);
+                        return;
+                    }
+                }
+
+                nLastResponse = hv_TMC_DoMeasure(TMC_MEASURE_PRG.TMC_DEF_DIST, TMC_INCLINE_PRG.TMC_AUTO_INC);
+                if (nLastResponse != 0)
+                {
+                    //actReturned?.Invoke(new { cmd = "measure", val = "measure failed", res = nLastResponse });
+                    json = @"{cmd : 'measure', val: 'measure failed', res: " + nLastResponse + ", point: [] }";
+                    actReturned?.Invoke(json);
+                    return;
+                }
+
+                nLastResponse = hv_TMC_GetSimpleCoord(5000, out double dummy1, out double dummy2, out double dummy3, TMC_INCLINE_PRG.TMC_AUTO_INC);
+                // to complete the measurement, and clear data
+                hv_TMC_DoMeasure(TMC_MEASURE_PRG.TMC_CLEAR, TMC_INCLINE_PRG.TMC_AUTO_INC);
+                //שמור את נתוני המדידה
+                double[] Point3d = new double[3];
+                Point3d[0] = PASS_GetX();
+                Point3d[1] = PASS_GetY();
+                Point3d[2] = PASS_GetZ();
+
+                json = @"{cmd : 'measure', val: 'ok', res: " + nLastResponse + ", point: [" + Point3d[0] + ", " + Point3d[1] + ", " + Point3d[2] + "] }";
+                actReturned?.Invoke(json);
+            });
+        }
+
+        public void cmdSetPrismTrack(bool on)
+        {
+            commandList.Add(() =>
+            {
+                string json;
+                if (on)
+                {
+                    nLastResponse = hv_AUS_SetUserLockState(ON_OFF_TYPE.ON);
+                    nLastResponse = hv_AUT_FineAdjust(this.SearchRangeHz, this.SearchRangeV, BOOLE.FALSE); //חיפוש הפריזמה והתמקדות במרכזה
+                    if (nLastResponse == 0)
+                    {
+                        nLastResponse = hv_AUT_LockIn(); //נסה לנעול את המכשיר על הפריזמה
+                        if (nLastResponse == 0)
+                        {
+                            hv_BMM_BeepAlarm(); //השמע פצפוף לאות שהמכשיר ננעל
+                            json = @"{cmd : 'lock on', val: 'ok', res: " + nLastResponse + ", point: [] }";
+                        }
+                        else
+                        {
+                            json = @"{cmd : 'lock on', val: 'lock failed', res: " + nLastResponse + ", point: [] }";
+                        }
+                    }
+                    else
+                    {
+                        json = @"{cmd : 'lock on', val: 'fine adjust failed', res: " + nLastResponse + ", point: [] }";
+                    }
+                }
+                else
+                {
+                    nLastResponse = hv_AUS_SetUserLockState(ON_OFF_TYPE.OFF);
+                    json = @"{cmd : 'lock off', val: 'ok', res: " + nLastResponse + ", point: [] }";
+                }
+
+                actReturned?.Invoke(json);
+            });
+        }
+
+        public void cmdPointAt(double Rel_HZ_Angle, double Rel_V_Angle)
+        {
+            commandList.Add(() =>
+            {
+                //בצע הצבעה לנקודה
+                short nTimeOutMs = 4500; //קביעת זמן תגובה ארוך על מנת לאפשר את הנסיעה
+                hv_COM_SetTimeOut(out nTimeOutMs);
+                short nLastResponse = hv_AUT_MakePositioning(Rel_HZ_Angle, Rel_V_Angle, AUT_POSMODE.AUT_NORMAL, AUT_ATRMODE.AUT_POSITION, BOOLE.FALSE); ;
+                bool ok = nLastResponse == 0;
+                string json = @"{cmd : 'gotopoint', val: '" + ok.ToString() + "', res: " + nLastResponse + ", point: [] }";
+                actReturned?.Invoke(json);
+            });
+        }
     }
+
 
 
 }

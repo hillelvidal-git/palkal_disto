@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "F7cERtobumCDjpl4rlOxNGzMM4y+rvJSvsBKdbqIZwvIOQs+VwpoEJurHl7SXnMqF+cYSeSUpnYb3/9OSHh8lA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\user\\source\\repos\\palkal_disto\\tpsdata\\tpsdata.vbproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

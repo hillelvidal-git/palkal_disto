@@ -39,7 +39,6 @@ C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\obj\D
 C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\obj\Debug\WideFieldBL.csproj.CopyComplete
 C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\obj\Debug\BL.dll
 C:\Users\User\Documents\hillel\WideField-20200203T181508Z-001\WideField\BL\obj\Debug\BL.pdb
-C:\Users\user\source\repos\palkal_disto\BL\obj\Debug\WideFieldBL.csprojAssemblyReference.cache
 C:\Users\user\source\repos\palkal_disto\BL\obj\Debug\WideFieldBL.Properties.Resources.resources
 C:\Users\user\source\repos\palkal_disto\BL\obj\Debug\WideFieldBL.csproj.GenerateResource.cache
 C:\Users\user\source\repos\palkal_disto\BL\obj\Debug\WideFieldBL.csproj.CoreCompileInputs.cache
@@ -51,3 +50,4 @@ C:\Users\user\source\repos\palkal_disto\BL\bin\Debug\BL.pdb
 C:\Users\user\source\repos\palkal_disto\BL\bin\Debug\TpsAdapter.dll
 C:\Users\user\source\repos\palkal_disto\BL\bin\Debug\TpsAdapter.pdb
 C:\Users\user\source\repos\palkal_disto\BL\obj\Debug\WideFieldBL.csproj.CopyComplete
+C:\Users\user\source\repos\palkal_disto\BL\obj\Debug\WideFieldBL.csprojAssemblyReference.cache

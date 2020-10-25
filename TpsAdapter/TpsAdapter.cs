@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using GeoComTypes;
 
 namespace TpsAdapter
@@ -15,6 +17,15 @@ namespace TpsAdapter
         private double SearchRangeHz = 0.06;
         private double SearchRangeV = 0.06;
 
+        bool IsRunning;
+        bool IsConnected;
+        Thread t;
+        public List<Action> commandList;
+        const int KEEPALIVE_INTERVAL_MS = 2000;
+
+        public Action<short> actBattery;
+        public Action<DateTime> actAlive;
+
         public TpsAdapter()
         {
             //אתחול התקשורת
@@ -23,16 +34,76 @@ namespace TpsAdapter
             short wait = 2; //2 seconds for communication timeout
             hv_COM_SetTimeOut(out wait);
             if (nLastResponse == 0) GeocomInitialized = true;
+
         }
 
         ~TpsAdapter()
         {
+            IsRunning = false;
             //Turn pointer off
             hv_EDM_Laserpointer(ON_OFF_TYPE.OFF);
             //Close connection
             this.DisconnectTps();
             //End communication
             hv_COM_End();
+        }
+
+        public void Run()
+        {
+            IsRunning = true;
+            commandList = new List<Action>();
+            t = new Thread(Loop);
+            t.Start();
+        }
+
+        public void Stop()
+        {
+            IsRunning = false;
+            hv_COM_End();
+        }
+
+        public void Loop()
+        {
+            Stopwatch swKeepAlive = new Stopwatch();
+            swKeepAlive.Start();
+
+            while (IsRunning & IsConnected)
+            {
+                foreach (var command in commandList.ToList())
+                {
+                    try
+                    {
+                        command.Invoke();
+                        Thread.Sleep(250);
+                    }
+                    catch { }
+                    commandList.Remove(command);
+                }
+
+                if (swKeepAlive.ElapsedMilliseconds > KEEPALIVE_INTERVAL_MS)
+                {
+                    swKeepAlive.Reset(); swKeepAlive.Start();
+                    KeepAlive();
+                    swKeepAlive.Reset(); swKeepAlive.Start();
+                }
+
+                Thread.Sleep(1);
+            }
+            Disconnect();
+        }
+
+
+        private void Disconnect()
+        {
+
+        }
+
+        private void KeepAlive()
+        {
+            GetBatteryPower(out short voltage); //מצב הסוללה)            
+            string json = @"{cmd : 'battery', val: '" + voltage.ToString() + "', res: " + nLastResponse + ", point: [] }";
+            actReturned?.Invoke(json);
+            actAlive?.Invoke(DateTime.Now); //broadcast last connection time
         }
 
         public bool ConnectTps(int Port, int Baudrate, int Retries)
@@ -42,14 +113,16 @@ namespace TpsAdapter
             hv_COM_SetTimeOut(out to);
             COM_PORT ePort = (COM_PORT)(Port - 1);
             nLastResponse = hv_COM_OpenConnection(ePort, (COM_BAUD_RATE.COM_BAUD_115200), (short)Retries);
-            
+
             //אם החיבור הצליח, יש לשמור את מיקום התחנה הנוכחי
             if (nLastResponse == 0)
             {
                 ImportStation();
                 //hv_BMM_BeepAlarm(); //השמעת צפצוץ לאות שהחיבור הצליח // גם ככה המכשיר משמיע צפצוץ
             }
-            return (nLastResponse == 0);
+
+            IsConnected = (nLastResponse == 0);
+            return IsConnected;
         }
 
         /// <summary>
@@ -79,6 +152,7 @@ namespace TpsAdapter
 
         public bool DoMeasure(bool HighAccuracy, bool UsePrism, out double[] Point3d, out DateTime PointTime)
         {
+
             double dummy1, dummy2, dummy3;
 
             //זמני - אין דרך טובה למדידה מדויקת יותר
@@ -467,10 +541,7 @@ namespace TpsAdapter
             return (Math.Abs(TiltVals[2]) >= maxTilt);
         }
 
-        public void BeepAlarm()
-        {
-            hv_BMM_BeepAlarm();
-        }
+        
 
         public double[] GetStation()
         {

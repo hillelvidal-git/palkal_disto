@@ -30,13 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Bs", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("Or", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup7 = new System.Windows.Forms.ListViewGroup("Gen", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Or", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Gen", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Srv", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Srv", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpProject = new System.Windows.Forms.TabPage();
             this.pnlLevelPoints = new System.Windows.Forms.Panel();
@@ -196,6 +196,8 @@
             this.tsPrism = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsReflectLess = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsTilted = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsBattery = new System.Windows.Forms.ToolStripProgressBar();
             this.tsBatteryLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsTpsCheck = new System.Windows.Forms.ToolStripStatusLabel();
@@ -206,8 +208,6 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.timerTpsAliveFade = new System.Windows.Forms.Timer(this.components);
             this.timerFadeTpsChecking = new System.Windows.Forms.Timer(this.components);
-            this.tsTilted = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1.SuspendLayout();
             this.tpProject.SuspendLayout();
             this.pnlLevelPoints.SuspendLayout();
@@ -309,14 +309,14 @@
             this.lvLevelPoints.ContextMenuStrip = this.cmsPoints;
             listViewGroup1.Header = "Bs";
             listViewGroup1.Name = "Bs";
-            listViewGroup6.Header = "Or";
-            listViewGroup6.Name = "Or";
-            listViewGroup7.Header = "Gen";
-            listViewGroup7.Name = "Gen";
+            listViewGroup2.Header = "Or";
+            listViewGroup2.Name = "Or";
+            listViewGroup3.Header = "Gen";
+            listViewGroup3.Name = "Gen";
             this.lvLevelPoints.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
             listViewGroup1,
-            listViewGroup6,
-            listViewGroup7});
+            listViewGroup2,
+            listViewGroup3});
             this.lvLevelPoints.HideSelection = false;
             this.lvLevelPoints.LargeImageList = this.imgPoints;
             this.lvLevelPoints.Location = new System.Drawing.Point(11, 59);
@@ -392,10 +392,10 @@
             // lvFieldPoints
             // 
             this.lvFieldPoints.ContextMenuStrip = this.cmsPoints;
-            listViewGroup2.Header = "Srv";
-            listViewGroup2.Name = "Srv";
+            listViewGroup4.Header = "Srv";
+            listViewGroup4.Name = "Srv";
             this.lvFieldPoints.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup2});
+            listViewGroup4});
             this.lvFieldPoints.HideSelection = false;
             this.lvFieldPoints.LargeImageList = this.imgPoints;
             this.lvFieldPoints.Location = new System.Drawing.Point(11, 59);
@@ -2128,14 +2128,14 @@
             this.dgvStakoutPoints.AllowUserToDeleteRows = false;
             this.dgvStakoutPoints.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvStakoutPoints.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvStakoutPoints.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvStakoutPoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvStakoutPoints.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
@@ -2151,17 +2151,17 @@
             this.dgvStakoutPoints.MultiSelect = false;
             this.dgvStakoutPoints.Name = "dgvStakoutPoints";
             this.dgvStakoutPoints.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvStakoutPoints.RowHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvStakoutPoints.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvStakoutPoints.RowHeadersWidth = 4;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.dgvStakoutPoints.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.dgvStakoutPoints.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvStakoutPoints.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvStakoutPoints.Size = new System.Drawing.Size(864, 633);
             this.dgvStakoutPoints.TabIndex = 2;
@@ -2387,8 +2387,19 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(458, 34);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(1252, 34);
             this.toolStripStatusLabel1.Spring = true;
+            // 
+            // tsTilted
+            // 
+            this.tsTilted.Name = "tsTilted";
+            this.tsTilted.Size = new System.Drawing.Size(0, 34);
+            // 
+            // toolStripStatusLabel3
+            // 
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(37, 34);
+            this.toolStripStatusLabel3.Text = "       ";
             // 
             // tsBattery
             // 
@@ -2446,17 +2457,6 @@
             // 
             this.timerFadeTpsChecking.Interval = 15;
             this.timerFadeTpsChecking.Tick += new System.EventHandler(this.timerFadeTpsChecking_Tick);
-            // 
-            // tsTilted
-            // 
-            this.tsTilted.Name = "tsTilted";
-            this.tsTilted.Size = new System.Drawing.Size(0, 34);
-            // 
-            // toolStripStatusLabel3
-            // 
-            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(37, 34);
-            this.toolStripStatusLabel3.Text = "       ";
             // 
             // MainForm
             // 

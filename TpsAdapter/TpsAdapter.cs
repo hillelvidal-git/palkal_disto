@@ -21,14 +21,15 @@ namespace TpsAdapter
         bool IsConnected;
         Thread t;
         public List<Action> commandList;
-        const int KEEPALIVE_INTERVAL_MS = 2000;
+        const int KEEPALIVE_INTERVAL_MS = 1700;
 
         public Action<short> actBattery;
-        public Action<DateTime> actAlive;
+        public Action actAlive;
 
         public TpsAdapter()
         {
             //אתחול התקשורת
+            commandList = new List<Action>();
             Console.WriteLine("dll path: " + WrapperPath);
             nLastResponse = hv_COM_Init();
             short wait = 2; //2 seconds for communication timeout
@@ -43,7 +44,7 @@ namespace TpsAdapter
             //Turn pointer off
             hv_EDM_Laserpointer(ON_OFF_TYPE.OFF);
             //Close connection
-            this.DisconnectTps();
+            this.cmdDisconnectTps();
             //End communication
             hv_COM_End();
         }
@@ -100,45 +101,31 @@ namespace TpsAdapter
 
         private void KeepAlive()
         {
-            GetBatteryPower(out short voltage); //מצב הסוללה)            
-            string json = @"{cmd : 'battery', val: '" + voltage.ToString() + "', res: " + nLastResponse + ", point: [] }";
-            actReturned?.Invoke(json);
-            actAlive?.Invoke(DateTime.Now); //broadcast last connection time
+            GetBatteryPower(out short voltage); //מצב הסוללה)             
+            string json = @"{cmd : 'battery', val: '" + voltage.ToString() + "', res: " + nLastResponse + ", point: [] }";            
+            if (voltage > 0)
+            {
+                actReturned?.Invoke(json); 
+                actAlive?.Invoke();
+                cmdCheckTilt();
+            }
         }
 
-        public bool ConnectTps(int Port, int Baudrate, int Retries)
+        public bool Connect(int Port, int Baudrate, int Retries)
         {
             //נסיון לפתיחת החיבור עם הדיסטומט
             short to = 1000;
+            hv_COM_End();
+            nLastResponse = hv_COM_Init();
             hv_COM_SetTimeOut(out to);
             COM_PORT ePort = (COM_PORT)(Port - 1);
             nLastResponse = hv_COM_OpenConnection(ePort, (COM_BAUD_RATE.COM_BAUD_115200), (short)Retries);
-
-            //אם החיבור הצליח, יש לשמור את מיקום התחנה הנוכחי
-            if (nLastResponse == 0)
-            {
-                ImportStation();
-                //hv_BMM_BeepAlarm(); //השמעת צפצוץ לאות שהחיבור הצליח // גם ככה המכשיר משמיע צפצוץ
-            }
 
             IsConnected = (nLastResponse == 0);
             return IsConnected;
         }
 
-        /// <summary>
-        /// Imports station position from TPS and stores it
-        /// </summary>
-        public void ImportStation()
-        {
-            hv_TMC_GetStation(out this.CurrentStation);
-        }
-
-
-        public bool DisconnectTps()
-        {
-            nLastResponse = hv_COM_CloseConnection();
-            return (nLastResponse == 0);
-        }
+        
 
         public bool RedLaserSwitch(bool on)
         {
@@ -318,11 +305,6 @@ namespace TpsAdapter
             angles[1] = PASS_GetV();
         }
 
-        public void PointAngle(double[] angles)
-        {
-            hv_AUT_MakePositioning(angles[0], angles[1], AUT_POSMODE.AUT_NORMAL, AUT_ATRMODE.AUT_POSITION, BOOLE.FALSE);
-        }
-
         /// <summary>
         /// Returns the horizontal distance between two points
         /// </summary>
@@ -416,7 +398,7 @@ namespace TpsAdapter
             newStation.dH0 = Position[2] - newStation.dHi;
 
             nLastResponse = hv_TMC_SetStation(newStation); //קבע את מיקום התחנה
-            ImportStation(); //קרא מחדש את המיקום מהמכשיר
+            cmdImportStation(); //קרא מחדש את המיקום מהמכשיר
             return (nLastResponse == 0);
         }
 

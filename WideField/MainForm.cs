@@ -24,17 +24,6 @@ namespace WideField
 
         bool Debbuging_Offline = false;//true;
 
-        private bool tpsConnectionOK
-        {
-            get { return _tpsConnectionOK; }
-            set
-            {
-                _tpsConnectionOK = value;
-                //עדכון ערכי המצב - סוללה, פילוס, חיבור
-                GetTpsStatus(value);
-            }
-        }
-
         private bool bTpsTilted
         {
             get
@@ -88,15 +77,19 @@ namespace WideField
 
             InitializeComponent();
             this.chkChekLevel.Checked = false;
-            this.myBL = new WideFieldBL.BL("COM" + nudPortName.Value.ToString(), this.tsAction, this.tsProgress);
+            this.myBL = new WideFieldBL.BL("COM" + nudPortName.Value.ToString());
             myBL.actTpsAlive += tpsAliveIndicator;
             myBL.actTpsReturned += tpsReturned;
+            myBL.actTpsConnectionStatus += tpsConnectionStatus;
+            myBL.actPrompt += Prompt;
 
             SyncDataFromServer(); //טעינת עץ הפרויקטים העדכני וסינכרון הנקודות בין המקומי והשרת
             SelectLastField();
             CheckPointExists();
             SayHello();
         }
+
+        double maxtilt = 0.00025;
 
         private void tpsReturned(string json)
         {
@@ -105,6 +98,23 @@ namespace WideField
                 tpsData o = JsonConvert.DeserializeObject<tpsData>(json);
                 switch (o.cmd)
                 {
+                    case "tilt":
+                        bool tilted = ((Math.Abs(o.point[0]) >= maxtilt)) || ((Math.Abs(o.point[1]) >= maxtilt));
+                        if (o.point[0] == 0 && o.point[1] == 0 && o.point[2] == 0) tilted = true;
+
+                        Console.WriteLine("ui got titl data: titlted? " + tilted + "  (max: " + maxtilt + ")");
+                        tsTilted.BackColor = tilted ? Color.Red : Color.LawnGreen;
+                        tsTilted.Text = tilted ? "המכשיר איננו מפולס" : "המכשיר מפולס";
+                        this.bTpsTilted = tilted;
+                                             
+
+                        //בכל מקרה, הצג את ערכי הפלס
+                        double angT1 = o.point[0] / Math.PI * 180 * 10000;
+                        double angT2 = o.point[1] / Math.PI * 180 * 10000;
+
+                        DisplayTpsStatus(angT1, angT2);
+
+                        break;
                     case "measure":
                         if (o.val == "ok")
                         {
@@ -132,7 +142,7 @@ namespace WideField
                     case "laser":
                         if (o.res == 0)
                         {
-                            tsAction.Text = "ציין הלייזר הופעל בהצלחה";
+                            tsAction.Text = o.val == "True" ? "ציין הלייזר הופעל בהצלחה" : "ציין הלייזר נכבה";
                         }
                         break;
                     case "battery":
@@ -157,6 +167,10 @@ namespace WideField
                     case "gotopoint":
                         if (o.val == true.ToString()) tsAction.Text = "ההצבעה הצליחה";
                         else tsAction.Text = "ההצבעה נכשלה";
+                        break;
+                    case "station":
+                        if (o.res == 0) tsAction.Text = "תחנה יובאה בהצלחה";
+                        else tsAction.Text = "יבוא התחנה נכשל";
                         break;
                 }
             });
@@ -260,102 +274,67 @@ namespace WideField
             tsAction.Text += "ברוך הבא!";
         }
 
-        private void TpsConnection_Changed(object sender, EventArgs e)
+        private void btnTpsConnection_Changed(object sender, EventArgs e)
         {
-            //לפני ניתוק כבה את ציין הלייזר
-            if (!chkConnect.Checked) chkRedLaser.Checked = false;
-
             myBL.ConnectTps(chkConnect.Checked, "COM" + nudPortName.Value.ToString());
-
-            if (myBL.bTpsConnected)
-            {
-
-                timerIsTpslive.Start();
-                TpsConnected(true); //עדכן מצב - מחובר
-                //שמירת מספר היציאה הטורית, לשימוש עתידי
-                try { myBL.SaveComPort((int)nudPortName.Value); }
-                catch { }
-            }
-            else
-            {
-                TpsConnected(false); //עדכן מצב - מנותק
-                tsAction.Text = "ההתחברות נכשלה. מנותק.";
-                timerIsTpslive.Stop();
-            }
         }
 
-        private void TpsConnected(bool connected)
+        void ToggleTpsGui(bool connected)
         {
-            this.chkConnect.CheckedChanged -= new System.EventHandler(this.TpsConnection_Changed);
+            if (IsHandleCreated) Invoke((MethodInvoker)delegate
+            {
+                //setConnectionBtnState(connected);
+
+                chkRedLaser.Enabled = connected;
+                chkTrack.Enabled = connected;
+                chkPrism.Enabled = connected;
+                chkAutoTarget.Enabled = connected;
+                chkReflectorLess.Enabled = connected;
+                chkAccuracy.Enabled = connected;
+                btnDoMeasure.Enabled = connected;
+                btnMeasureBs.Enabled = connected;
+                btnSetStation.Enabled = connected;
+                btnImportStation.Enabled = connected;
+                btnImportStation.Enabled = connected;
+                groupBox11.Visible = connected;
+                tsBattery.Visible = connected;
+                tsBatteryLabel.Visible = connected;
+                tsTilted.Visible = connected;
+
+                //tsAction.Text = connected ? "מחובר לדיסטומט" : "מנותק";
+
+                if (connected)
+                {
+                    tsTpsAlive.BackColor = Color.Yellow;
+                    chkRedLaser.Checked = true; //לאחר חיבור נסה להפעיל את ציין הלייזר
+                    chkReflectorLess.Checked = true;
+                }
+                else
+                {
+                    chkTrack.Checked = false;
+                    chkPrism.Checked = false;
+                    chkAutoTarget.Checked = false;
+                    chkReflectorLess.Checked = false;
+                    tsTpsAlive.BackColor = Color.Red;
+                    timerTpsAliveFade.Stop(); //stay red...
+                }
+
+                was_alive = connected;
+            });
+        }
+
+        private void setConnectionBtnState(bool connected)
+        {
+            if (chkConnect.Checked == connected) return;
+
+            this.chkConnect.CheckedChanged -= new System.EventHandler(this.btnTpsConnection_Changed);
             chkConnect.Checked = connected;
-            this.chkConnect.CheckedChanged += new System.EventHandler(this.TpsConnection_Changed);
-
-            //אפשר או מנע את השימוש בכפתורים השונים בהתאם למצב החיבור
-            chkRedLaser.Enabled = connected;
-            chkTrack.Enabled = connected;
-            chkPrism.Enabled = connected;
-            chkAutoTarget.Enabled = connected;
-            chkReflectorLess.Enabled = connected;
-            chkAccuracy.Enabled = connected;
-            //btnDoMeasure.Enabled = connected;
-            btnMeasureBs.Enabled = connected;
-            btnSetStation.Enabled = connected;
-            btnImportStation.Enabled = connected;
-            btnImportStation.Enabled = connected;
-            groupBox11.Visible = connected;
-
-            //אנימציה של חיבור
-            pctConnected.Visible = connected;
-
-            if (connected)
-            {
-                
-                chkRedLaser.Checked = true; //לאחר חיבור נסה להפעיל את ציין הלייזר
-                chkReflectorLess.Checked = true;
-                tsAction.Text = "מחובר לדיסטומט";
-
-                GetTpsStatus(true); // בודק ומציג את מצב הפילוס והסוללה
-
-                //StatusTimer.Start(); //מפעיל שעון שבודק כל פרק זמן האם החיבור עדיין תקין
-            }
-            else
-            {
-                //StatusTimer.Stop();
-
-                chkTrack.Checked = false;
-                chkPrism.Checked = false;
-                chkAutoTarget.Checked = false;
-                chkReflectorLess.Checked = false;
-                tsAction.Text = "מנותק";
-            }
-
-            //הצג את סמל החיבור
-            tsConnection.Visible = connected;
+            this.chkConnect.CheckedChanged += new System.EventHandler(this.btnTpsConnection_Changed);
         }
 
         private void RedLaserSwitch(object sender, EventArgs e)
         {
             myBL.cmdRedLaser(chkRedLaser.Checked);
-
-            //if (chkRedLaser.Checked) //הפעלת הציין
-            //{
-            //    if (myBL.RedLaserSwitch(true)) //נסה להפעיל את ציין הלייזר
-            //    {
-            //        tsAction.Text = "ציין הלייזר נדלק בהצלחה"; //הציין הופעל
-            //        tsRedLaser.Visible = true;
-
-            //        CheckTps(); //מכיוון שקיבלנו תשובה, ניתן לבצע בדיקת סוללה ופילוס
-
-            //    }
-            //    else //הפעלה נכשלה
-            //        chkRedLaser.Checked = false;
-            //}
-            //else //כיבוי הציין
-            //{
-            //    myBL.RedLaserSwitch(false);
-            //    tsRedLaser.Visible = false;
-            //    tsAction.Text = "ציין הלייזר כבוי";
-            //}
         }
 
         private void tsAction_TextChanged(object sender, EventArgs e)
@@ -369,45 +348,7 @@ namespace WideField
 
         private void MeasurePoint(object sender, EventArgs e)
         {
-            if (chkNewMeasure.Checked)
-            {
-                Measure();
-                return;
-            }
-            
-            if (!ReadyToMeasure())
-                return;
-
-            if ((chkAutoTarget.Checked) && (!FindPrism()))
-                return;
-
-            tsAction.Text = "מבצע מדידה...";
-
-            double[] pt = new double[3];
-            bool UsePrism = chkPrism.Checked || chkAutoTarget.Checked;
-
-            if (TryToMeasure(UsePrism, out pt))
-            {
-                tsAction.Text = "הנקודה נמדדה בהצלחה";
-
-                string errorMsg;
-                WideFieldBL.DbPoint newPoint = CreateNewPoint(pt);
-                if (SavePointToDB(newPoint, out errorMsg))
-                {
-                    myBL.cmdTpsBeepNormal();
-                    this.nudPointNumber.Value++;
-                    AddPointToList(newPoint);
-                }
-                else
-                {
-                    tsAction.Text = "שמירת הנקודה נכשלה";
-                    MessageBox.Show(errorMsg, "שמירת הנקודה נכשלה");
-                }
-            }
-            else
-                tsAction.Text = "מדידה נכשלה";
-
-            
+            Measure();
         }
 
         private void Measure()
@@ -592,73 +533,25 @@ namespace WideField
             //if (chkTrack.Checked) //הפעלת נעילה ועקיבה
             //{
 
-                //    chkPrism.Checked = true; //אם מפעילים עקיבה צריך לעבור למצב פריזמה
-                //    if (myBL.TrackingSwitch(true)) //אם הושגה נעילה
-                //    {
-                //        tsTrack.Visible = true;
-                //        tsAction.Text = "עקיבה הופעלה";
-                //    }
-                //    else
-                //        chkTrack.Checked = false; //נעילה נכשלה
+            //    chkPrism.Checked = true; //אם מפעילים עקיבה צריך לעבור למצב פריזמה
+            //    if (myBL.TrackingSwitch(true)) //אם הושגה נעילה
+            //    {
+            //        tsTrack.Visible = true;
+            //        tsAction.Text = "עקיבה הופעלה";
+            //    }
+            //    else
+            //        chkTrack.Checked = false; //נעילה נכשלה
 
-                //}
-                //else //ביטול נעילה
-                //{
-                //    myBL.TrackingSwitch(false);
-                //    tsTrack.Visible = false;
-                //    tsAction.Text = "עקיבה בוטלה";
-                //}
+            //}
+            //else //ביטול נעילה
+            //{
+            //    myBL.TrackingSwitch(false);
+            //    tsTrack.Visible = false;
+            //    tsAction.Text = "עקיבה בוטלה";
+            //}
         }
 
-        public void GetTpsStatus(bool connected)
-        {
-
-            bool tilted;
-            short battery;
-            double[] TiltVals;
-
-            if (!connected)
-            {
-                //אבד הקשר עם המכשיר
-                AlertTip.ToolTipTitle = "הקשר נותק";
-                AlertTip.Show("הקשר עם הדיסטומט אבד. עובר למצב מנותק", (IWin32Window)statusStrip1, 5500);
-                //התנתק
-                chkConnect.Checked = false;
-
-                return;
-            }
-            else
-            {
-                //החיבור תקין
-                //ועל כן ניתן לבדוק כעת את מצב הפילוס והסוללה
-
-                myBL.CheckStatus(out battery, out tilted, out TiltVals);
-
-                if (tilted)
-                {
-                    //המכשיר יצא מפילוס
-                    AlertTip.ToolTipTitle = "בעיית פילוס";
-                    AlertTip.Show("המכשיר יצא מפילוס. יש לפלסו שוב לפני המשך המדידות", (IWin32Window)statusStrip1, 5500);
-
-                    this.bTpsTilted = true;
-
-                    //TODO: האם צריך להתנתק?
-
-                }
-                else
-                {
-                    this.bTpsTilted = false;
-                }
-
-                //בכל מקרה, הצג את ערכי הפלס
-                double angT1 = TiltVals[0] / Math.PI * 180 * 10000;
-                double angT2 = TiltVals[1] / Math.PI * 180 * 10000;
-
-                DisplayTpsStatus(angT1, angT2, battery);
-            }
-        }
-
-        private void DisplayTpsStatus(double angT1, double angT2, short battery)
+        private void DisplayTpsStatus(double angT1, double angT2)
         {
             //הצג ערכי הפילוס
             lblCrossTilt.Text = angT1.ToString("0.0") + " Deg.(e-4)";
@@ -669,8 +562,6 @@ namespace WideField
             if (lt > pbLengthTilt.Maximum) lt = pbLengthTilt.Maximum;
             pbCrossTilt.Value = ct;
             pbLengthTilt.Value = lt;
-
-            
         }
 
         private void BeginStatusCheck()
@@ -773,7 +664,7 @@ namespace WideField
             {
                 //ההתוויה הצליחה
                 //הדלק לייזר אדום
-                myBL.RedLaserSwitch(true);
+                myBL.cmdRedLaser(true);
 
                 tsAction.Text = "נקודה " + (string)row.Cells["dgcName"].Value + " סומנה בהצלחה";
                 row.Cells["dgcZ"].Value = finalZ.ToString("0.000");
@@ -798,7 +689,7 @@ namespace WideField
             {
                 //ההתוויה נכשלה
                 //כבה לייזר אדום
-                myBL.RedLaserSwitch(false);
+                myBL.cmdRedLaser(false);
                 tsAction.Text = "נקודה " + (string)row.Cells["dgcName"].Value + " לא נמצאה!";
                 row.Cells["dgcName"].Style.BackColor = Color.Red;
             }
@@ -1075,20 +966,7 @@ namespace WideField
         {
             if (!this.chkChekLevel.Checked)
                 return true;
-
-            bool tilted;
-            short battery;
-            double[] TiltVals;
-            myBL.CheckStatus(out battery, out tilted, out TiltVals);
-            double angT1 = TiltVals[0] / Math.PI * 180 * 10000;
-            double angT2 = TiltVals[1] / Math.PI * 180 * 10000;
-            DisplayTpsStatus(angT1, angT2, battery);
-
-            double th = (double)this.nudMinLevel.Value;
-            if ((Math.Abs(angT1) < th) && (Math.Abs(angT2) < th))
-                return true;
-            else
-                return false;
+            else return (!this.bTpsTilted);            
         }
 
         private void btnCalcStation_Click(object sender, EventArgs e)
@@ -1386,21 +1264,28 @@ namespace WideField
             return (line.StartsWith("OK"));
         }
 
-        private void button5_Click_1(object sender, EventArgs e)
-        {
-            GetTpsStatus(true);
-        }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             //ליתר בטחון, הפסק את תהליך בקידת המצב, למקרה שהוא עדין פעיל
             try
             {
                 myBL.StopTps();
-                this.checkProcess?.Kill();
-                //this.activiewClient.Stop();
+                myBL.actTpsAlive -= tpsAliveIndicator;
+                myBL.actTpsReturned -= tpsReturned;
+                myBL.actTpsConnectionStatus -= tpsConnectionStatus;
+                myBL.actPrompt -= Prompt;
             }
             catch { }
+        }
+
+        private void Prompt(string msg)
+        {
+            if (IsHandleCreated) Invoke((MethodInvoker)delegate
+            {
+                tsAction.Text = msg;
+                if (msg.Contains("מנסה להתחבר")) tsTpsAlive.BackColor = Color.Orange;
+                else if (msg.Contains("דיסטומט לא נמצא")) tsTpsAlive.BackColor = Color.Red;
+            });
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -1755,14 +1640,6 @@ namespace WideField
         {
             Process.Start("http://google.com");
         }
-      
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            bool alive = myBL.IsTpsAlive(out int s);
-            label2.Text = alive ? "ALIVE" : "LOST";
-            label5.Text = "Seconds: " + s;
-        }
 
         int tps_alive_fade_counter;
         private void timerTpsAliveFade_Tick(object sender, EventArgs e)
@@ -1776,7 +1653,6 @@ namespace WideField
             }
             else
             {
-
                 tsTpsAlive.BackColor = Color.FromArgb(tps_alive_fade_counter, 255, tps_alive_fade_counter);
             }
 
@@ -1796,22 +1672,50 @@ namespace WideField
 
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        bool was_alive;
+        private void tpsConnectionStatus(bool alive, bool force = false)
         {
-            //kill
-            myBL.StopTps();
+
+            if (IsHandleCreated) Invoke((MethodInvoker)delegate
+            {
+                timerFadeTpsChecking.Stop();
+                tsTpsCheck.BackColor = Color.Red;
+                tps_check_fade_counter = 0;
+                timerFadeTpsChecking.Start();
+
+                if (!force && (was_alive == alive)) return; //no change
+
+                if (alive)
+                {
+                    ToggleTpsGui(true); //עדכן מצב - מחובר
+                    tsAction.Text = "המכשיר מחובר.";
+                    try { myBL.SaveComPort((int)nudPortName.Value); }
+                    catch { }
+                }
+                else
+                {
+                    ToggleTpsGui(false); //עדכן מצב - מנותק
+                    tsAction.Text = "המכשיר מנותק.";
+                }
+
+            });
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        int tps_check_fade_counter;
+        private void timerFadeTpsChecking_Tick(object sender, EventArgs e)
         {
-            //reconnect
-            myBL.ConnectTps(true, "COM" + nudPortName.Value.ToString());
-        }
 
-        private void timerIsTpslive_Tick(object sender, EventArgs e)
-        {
-            bool alive = myBL.IsTpsAlive(out int s);
-            TpsConnected(alive);
+            tps_check_fade_counter += 25;
+            if (tps_check_fade_counter > 255)
+            {
+                timerFadeTpsChecking.Stop();
+                tsTpsCheck.BackColor = Color.White;
+                return;
+            }
+            else
+            {
+                tsTpsCheck.BackColor = Color.FromArgb(255, tps_check_fade_counter, tps_check_fade_counter);
+            }
         }
     } //Class
 } //Namespace

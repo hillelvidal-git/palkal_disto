@@ -30,4 +30,3 @@ C:\Users\user\source\repos\palkal_disto\TpsAdapter\obj\Debug\TpsAdapter.csproj.C
 C:\Users\user\source\repos\palkal_disto\TpsAdapter\obj\Debug\TpsAdapter.csproj.CopyComplete
 C:\Users\user\source\repos\palkal_disto\TpsAdapter\obj\Debug\TpsAdapter.dll
 C:\Users\user\source\repos\palkal_disto\TpsAdapter\obj\Debug\TpsAdapter.pdb
-C:\Users\user\source\repos\palkal_disto\TpsAdapter\obj\Debug\TpsAdapter.csprojAssemblyReference.cache

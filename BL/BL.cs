@@ -28,64 +28,76 @@ namespace WideFieldBL
         private string lastDsitomatCOM;
         public bool bTpsTilted;
         FilesAdapter filesTool;
-        
+
         public int[] CurrentAttribution;
 
-        DateTime tpsLastAlive;
+        bool tpsLastAlive;
 
         public Action actTpsAlive;
+        public Action<string> actTpsReturned;
+        public Action<bool, bool> actTpsConnectionStatus;
+        public Action<string> actPrompt;
 
         //דגל שמציין האם המכשיר מחובר
         public bool bTpsConnected;
-
-        //אנו שומרים מצביע לשורת המצב כי לפעמים יש צורך לעדכן את הסטטוס כבר בתוך שכבה זו
-        // אמנם בדרך כלל נעדיף לעדכן את הסטטוס משכבת הממשק
-        private ToolStripLabel tsPrompt;
-        private ToolStripProgressBar tsProgress;
 
         short tpsBatteryVoltage;
         string tps_port;
 
         System.Timers.Timer timerCheckTps;
 
-        public Action<string> actTpsReturned;
-
-        public BL(string tpsport, ToolStripLabel label, ToolStripProgressBar prgBar)
+        public BL(string tpsport)
         {
             tps_port = tpsport;
 
             // Create a timer with a two second interval.
-            timerCheckTps = new System.Timers.Timer(5000);
-            // Hook up the Elapsed event for the timer. 
-            timerCheckTps.Elapsed += OnTimedEvent;
+            timerCheckTps = new System.Timers.Timer(4000);
+            timerCheckTps.Elapsed += checkTpsConnection;
             timerCheckTps.AutoReset = true;
-            //timerCheckTps.Enabled = true;
+            timerCheckTps.Enabled = true;
 
             StartTps();
 
             this.CurrentAttribution = new int[] { -1, -1, -1, -1 };
-            this.tsPrompt = label;
-            this.tsProgress = prgBar;
 
             this.filesTool = new FilesAdapter();
         }
 
-        private void OnTimedEvent(object sender, ElapsedEventArgs e)
+        private void checkTpsConnection(object sender, ElapsedEventArgs e)
         {
+            Console.WriteLine("check tps connection > alive? " + tpsLastAlive + " / connected? " + bTpsConnected);
+
             timerCheckTps.Stop();
-            if (IsTpsAlive())
+            bool alive = tpsLastAlive;
+
+            actTpsConnectionStatus?.Invoke(alive, false);
+
+            if (bTpsConnected) //should be connected
             {
 
-            }
-            else
-            {
-                if (!(tps is null))
+                if (alive)
                 {
-                    StopTps();
+                    Console.WriteLine("should be connected, and is actually alive, so nothing to do");
                 }
-
-                ConnectTps(true, tps_port);
+                else
+                {
+                    //dispose tps object and thread  
+                    Console.WriteLine("should be connected, but it's not alive, so STOP");
+                    StopTps();
+                }                
             }
+            else //sould be disconnected
+            {
+                //try to reconnect tps                
+                if (this.try_to_connect)
+                {
+                    Console.WriteLine("try to stop then reconnect...");
+                    StopTps();
+                    ConnectTps(true, tps_port);
+                }
+            }
+
+            tpsLastAlive = false; //reset flag. next time, timer will check if we got a new alive msg.
             timerCheckTps.Start();
         }
 
@@ -95,6 +107,8 @@ namespace WideFieldBL
             tps.actAlive += tpsAlive;
             tps.actBattery += tpsBattery;
             tps.actReturned += tpsReturned;
+
+
         }
 
         private void tpsReturned(string obj)
@@ -112,87 +126,85 @@ namespace WideFieldBL
             tpsBatteryVoltage = v;
         }
 
-        private void tpsAlive(DateTime t)
+        private void tpsAlive()
         {
-            tpsLastAlive = t;
+            tpsLastAlive = true;
             actTpsAlive?.Invoke();
         }
 
-        public bool IsTpsAlive(out int diff)
-        {
-            DateTime now = DateTime.Now;
-            var diffInSeconds = (now - tpsLastAlive).TotalSeconds;
-            diff = (int) diffInSeconds;
-            return diffInSeconds < 5;
-        }
-
-        public bool IsTpsAlive()
-        {
-            DateTime now = DateTime.Now;
-            var diffInSeconds = (now - tpsLastAlive).TotalSeconds;
-            
-            return diffInSeconds < 5;
-        }
-
-
         public void ConnectTps(bool conncet, string PortName)
         {
+            Console.WriteLine("func. connect > " + conncet);
+
+            timerCheckTps.Stop();
+
             if (!conncet) //אם זו בקשה להתנתק
             {
-                tps.DisconnectTps();
-                this.bTpsConnected = false;
-                tsPrompt.Text = "מנותק";
+                Console.WriteLine("DISCONNECTING by request and setting [try = false]");
+                StopTps(); //stop and dispose tps object    
                 PortName = "";
-                return;
-            }
-
-            //אם זו בקשה להתחבר
-
-            //if (tps is null) 
-                StartTps();
-
-            string DistomatPort = "";
-            string strPortName;
-            //List<string> Ports = GetPortsNames(this.lastDsitomatCOM);
-            //Ports.Insert(0, PortName);
-            List<string> Ports = new List<string>() { PortName };
-
-            foreach (string port in Ports)
-            {
-                strPortName = FixPortName(port);
-                tsPrompt.Text = "מנסה להתחבר: COM" + strPortName + "...";
-                System.Threading.Thread.Sleep(1);
-
-                try
-                {
-                    if (tps.ConnectTps(Convert.ToInt16(strPortName), 115200, 1))
-                    {
-                        //החיבור עם היציאה הצליח
-                        DistomatPort = strPortName;
-                        this.bTpsConnected = true;
-                        tsPrompt.Text = "החיבור הצליח";
-                        tps.Run();
-                        break;
-                    }
-                }
-                catch (Exception er)
-                {
-                    MessageBox.Show(strPortName + "\t" + er.Message);
-                }
-            }
-
-            if (DistomatPort == "") //אף יציאה לא התאימה
-            {
-                PortName = "";
-                tsPrompt.Text = "דיסטומט לא נמצא";
+                this.try_to_connect = false;
             }
             else
             {
-                PortName = DistomatPort;
-                this.lastDsitomatCOM = DistomatPort;
-                
-            }
+                Console.WriteLine("try to coonect: " + PortName);
 
+                //אם זו בקשה להתחבר
+                this.try_to_connect = true;
+                StartTps();
+
+                bool success = false;
+
+                string DistomatPort = "";
+                string strPortName;
+                //List<string> Ports = GetPortsNames(this.lastDsitomatCOM);
+                //Ports.Insert(0, PortName);
+                List<string> Ports = new List<string>() { PortName };
+
+                foreach (string port in Ports)
+                {
+                    strPortName = FixPortName(port);
+                    actPrompt?.Invoke("מנסה להתחבר: COM" + strPortName + "...");
+
+                    try
+                    {
+                        if (tps.Connect(Convert.ToInt16(strPortName), 115200, 1))
+                        {
+                            Console.WriteLine("CONNECTION SUCCEDDED");
+                            this.bTpsConnected = true;
+                            //החיבור עם היציאה הצליח
+                            tpsLastAlive = true;
+                            DistomatPort = strPortName;
+                            success = true;
+                            tps.Run();
+                            //System.Threading.Thread.Sleep(200);
+                            tps.cmdImportStation();
+                            break;
+                        }
+                    }
+                    catch (Exception er)
+                    {
+                        MessageBox.Show(strPortName + "\t" + er.Message);
+                    }
+                }
+
+                if (success)
+                {
+                    PortName = DistomatPort;
+                    tps_port = "COM" + PortName;
+                    this.lastDsitomatCOM = DistomatPort;
+                    actPrompt?.Invoke("החיבור הצליח");
+                }
+                else
+                {
+                    Console.WriteLine("CONNECTION FAILED");
+                    PortName = "";
+                    actPrompt?.Invoke("דיסטומט לא נמצא");
+                    this.bTpsConnected = false; //save new status
+                    actTpsConnectionStatus?.Invoke(false, true); //inform user
+                }
+            }
+            timerCheckTps.Start();
         }
 
         private List<string> GetPortsNames(string firstPort)
@@ -216,27 +228,18 @@ namespace WideFieldBL
             return fix.Substring(3);
         }
 
-        public bool RedLaserSwitch(bool on)
-        {
-            if (!this.bTpsConnected) //אם החיבור מנותק
-                return false;
-
-            return tps.RedLaserSwitch(on);
-        }
-
-
         public bool DoMeasure(bool HighAccruacy, bool UsePrism, out double[] pt)
         {
             pt = new double[3];
 
             if (!this.bTpsConnected)
             {
-                tsPrompt.Text = "המכשיר מנותק. מדידה נכשלה.";
+                actPrompt?.Invoke("המכשיר מנותק. מדידה נכשלה.");
                 return false;
             }
             if (this.bTpsTilted)
             {
-                tsPrompt.Text = "המכשיר איננו מפולס. מדידה נכשלה.";
+                actPrompt?.Invoke("המכשיר איננו מפולס. מדידה נכשלה.");
                 return false;
             }
 
@@ -246,7 +249,7 @@ namespace WideFieldBL
 
         public bool AutoTargetSwitch(bool on)
         {
-            tsPrompt.Text = "מחפש מטרה...";
+            actPrompt?.Invoke("מחפש מטרה...");
             return tps.AutoTargetSwitch(on);
         }
 
@@ -284,7 +287,7 @@ namespace WideFieldBL
             if (MeasureStartZ)
             {
                 double[] startZpoint;
-                tsPrompt.Text = "מודד גובה ראשוני...";
+                actPrompt?.Invoke("מודד גובה ראשוני...");
                 if (tps.DoMeasure(false, false, out startZpoint, out ptime))
                     XYZ[2] = startZpoint[2];
                 else
@@ -309,17 +312,17 @@ namespace WideFieldBL
                 if (this.StopPlay)
                     break;
 
-                tsPrompt.Text = "נקודה  " + ptName + ": >ניסיון " + tries.ToString() + "< מחשב...";
+                actPrompt?.Invoke("נקודה  " + ptName + ": >ניסיון " + tries.ToString() + "< מחשב...");
                 //חישוב הזוויות לנקודה
                 tps.GetRelativePosition(XYZ, out HorizontalAngle, out VerticalAngle);
 
                 //ביצוע הצבעה
-                tsPrompt.Text = "נקודה  " + ptName + ": ניסיון " + tries.ToString() + ": נוסע לנקודה...";
+                actPrompt?.Invoke("נקודה  " + ptName + ": ניסיון " + tries.ToString() + ": נוסע לנקודה...");
                 if (!tps.PointAt(HorizontalAngle, VerticalAngle))
                     return false; //ההצבעה נכשלה
 
                 //מדידת הנקודה בפועל
-                tsPrompt.Text = "נקודה  " + ptName + ": ניסיון " + tries.ToString() + ": מודד נקודה...";
+                actPrompt?.Invoke("נקודה  " + ptName + ": ניסיון " + tries.ToString() + ": מודד נקודה...");
                 if (!tps.DoMeasure(false, false, out actualXYZ, out ptime))
                     return false; //המדידה נכשלה
 
@@ -334,7 +337,7 @@ namespace WideFieldBL
                 {
                     triesNum = tries;
                     PointFound = true;
-                    tsPrompt.Text = "נקודה  " + ptName + " נמצאה";
+                    actPrompt?.Invoke("נקודה  " + ptName + " נמצאה");
                     goto EndLoop;
                 }
 
@@ -393,7 +396,7 @@ namespace WideFieldBL
                 lastXYgap = XYgap;
 
             }
-            #endregion
+        #endregion
 
         EndLoop:
 
@@ -450,27 +453,11 @@ namespace WideFieldBL
             return (V1[0] * V2[0] + V1[1] * V2[1] + V1[2] * V2[2]);
         }
 
-        /// <summary>
-        /// Returns a vector which is the cross product (Determinanta) of two 3-dimensional vectors 
-        /// </summary>
-        /// <param name="V1"></param>
-        /// <param name="V2"></param>
-        /// <returns></returns>
         private double[] CrossProduct(double[] V1, double[] V2)
         {
             return new double[3] { V1[1] * V2[2] - V1[2] * V2[1], V1[2] * V2[0] - V1[0] * V2[2], V1[0] * V2[1] - V1[1] * V2[0] };
         }
 
-        /// <summary>
-        /// Returns the predicted Z value by computing the tangens of the line between two last points
-        /// </summary>
-        /// <param name="XYZ"></param>
-        /// <param name="actualXYZ"></param>
-        /// <param name="lastXYZ"></param>
-        /// <param name="XYgap"></param>
-        /// <param name="lastXYgap"></param>
-        /// <param name="M"></param>
-        /// <returns></returns>
         private double GetZByTangens(double[] XYZ, double[] actualXYZ, double[] lastXYZ, double XYgap, double lastXYgap, out double M)
         {
             M = (lastXYgap - XYgap) / (lastXYZ[2] - actualXYZ[2]); //חישוב השיפוע
@@ -494,7 +481,7 @@ namespace WideFieldBL
 
         public void UpdateStation()
         {
-            tps.ImportStation();
+            tps.cmdImportStation();
         }
 
         /// <summary>
@@ -503,7 +490,7 @@ namespace WideFieldBL
         /// <param name="pointNumber"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public bool MeasureTarget(int ptId,string ptName, out Target target, bool UsePrism)
+        public bool MeasureTarget(int ptId, string ptName, out Target target, bool UsePrism)
         {
             target = new Target();
             try
@@ -516,19 +503,19 @@ namespace WideFieldBL
             if (!GetPointXYZ(ptId, out target.Position))
                 return false;
 
-            tsPrompt.Text = "מודד מטרה...";
+            actPrompt?.Invoke("מודד מטרה...");
 
             // במקרה של פריזמה, יש למצוא את הפריזמה לפני המדידה
             if (UsePrism)
             {
-                tsPrompt.Text = "מחפש מטרה...";
+                actPrompt?.Invoke("מחפש מטרה...");
                 if (AutoTargetSwitch(true))
                 {
-                    tsPrompt.Text = "מטרה נמצאה. מבצע מדידה...";
+                    actPrompt?.Invoke("מטרה נמצאה. מבצע מדידה...");
                 }
                 else
                 {
-                    tsPrompt.Text = "מטרה לא נמצאה. מדידה בוטלה.";
+                    actPrompt?.Invoke("מטרה לא נמצאה. מדידה בוטלה.");
                     return false;
                 }
             }
@@ -582,7 +569,7 @@ namespace WideFieldBL
             Station[2] = ((t1.Position[2] + t2.Position[2]) - (t1.VDist + t2.VDist)) / 2;
 
             return true;
-        }
+        }               
 
         public void cmdSetPrismTrack(bool on)
         {
@@ -672,13 +659,6 @@ namespace WideFieldBL
             return true;
         }
 
-        /// <summary>
-        /// Returns the CounterClockWise angle ACB
-        /// </summary>
-        /// <param name="C">the central point</param>
-        /// <param name="A"></param>
-        /// <param name="B"></param>
-        /// <returns></returns>
         private double GetAngleCCW(double[] C, double[] A, double[] B)
         {
             double a = Math.Atan2(A[1] - C[1], A[0] - C[0]);
@@ -693,6 +673,8 @@ namespace WideFieldBL
         }
 
         DbAdapter lda = new DbAdapter();
+        public bool try_to_connect;
+
         public bool GetPointXYZ(int ptId, out double[] XYZ)
         {
             XYZ = new double[3];
@@ -820,7 +802,7 @@ namespace WideFieldBL
         {
             if (lda.InsertPoint(pt, out webidExists, out nameExists, out errorMsg))
             {
-                tsPrompt.Text = "נקודה מס' " + pt.Number + " נשמרה בהצלחה";
+                actPrompt?.Invoke("נקודה מס' " + pt.Number + " נשמרה בהצלחה");
                 return true;
             }
             else
@@ -842,7 +824,7 @@ namespace WideFieldBL
                 return false;
             }
         }
-        
+
         public void PointAt(double[] XYZ)
         {
             //חישוב הזוויות לנקודה
@@ -1181,10 +1163,18 @@ namespace WideFieldBL
 
         public void StopTps()
         {
+            Console.WriteLine("func. stop tps");
             try
             {
+                actPrompt?.Invoke("מתנתק...");
+                this.bTpsConnected = false; //save new status
+                actTpsConnectionStatus?.Invoke(false, true); //inform user
+                tpsLastAlive = false;
+
                 if (!(tps is null))
                 {
+                    tps.cmdDisconnectTps();
+                    System.Threading.Thread.Sleep(150);
                     tps.Stop();
                     tps.actAlive -= tpsAlive;
                     tps.actBattery -= tpsBattery;

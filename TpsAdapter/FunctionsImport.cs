@@ -177,6 +177,14 @@ namespace TpsAdapter
 
         public Action<string> actReturned;
 
+        public void cmdDisconnectTps()
+        {
+            commandList.Add(() =>
+            {
+                nLastResponse = hv_COM_CloseConnection();
+            });
+        }
+
         public void cmdRedLaser(bool on)
         {
             commandList.Add(() =>
@@ -194,6 +202,16 @@ namespace TpsAdapter
             commandList.Add(() =>
             {
                 hv_BMM_BeepAlarm();
+            });
+        }
+        public void cmdImportStation()
+        {
+            commandList.Add(() =>
+            {
+                hv_TMC_GetStation(out this.CurrentStation);
+                string json = @"{cmd : 'station', val: 'ok', res: " + nLastResponse + ", point: [] }";
+                actReturned?.Invoke(json);
+                return;
             });
         }
 
@@ -287,6 +305,33 @@ namespace TpsAdapter
                 short nLastResponse = hv_AUT_MakePositioning(Rel_HZ_Angle, Rel_V_Angle, AUT_POSMODE.AUT_NORMAL, AUT_ATRMODE.AUT_POSITION, BOOLE.FALSE); ;
                 bool ok = nLastResponse == 0;
                 string json = @"{cmd : 'gotopoint', val: '" + ok.ToString() + "', res: " + nLastResponse + ", point: [] }";
+                actReturned?.Invoke(json);
+            });
+        }
+
+        public void cmdCheckTilt()
+        {
+            commandList.Add(() =>
+            {
+                double[] Inclination = new double[3];
+
+                //קריאת נתוני הפלס מהמכשיר לתוך העוטף
+                nLastResponse = hv_TMC_GetTiltStatus();
+                if ((nLastResponse == 0) || (nLastResponse == 1285))                
+                {
+                    //קריאת נתוני הפלס מהעוטף
+                    Inclination[0] = PASS_GetX();
+                    Inclination[1] = PASS_GetY();
+                    Inclination[2] = PASS_GetZ();
+                    Console.WriteLine("tilt data recieved: [" + Inclination[0] + ", " + Inclination[1] + ", " + Inclination[2] + "]");
+                }
+                else
+                {
+                    //המדידה לא הצליחה
+                    Console.WriteLine("tilt data failed");
+                }
+
+                string json = @"{cmd : 'tilt', val: 'ok', res: " + nLastResponse + ", point: [" + Inclination[0] + ", " + Inclination[1] + ", " + Inclination[2] + "] }";
                 actReturned?.Invoke(json);
             });
         }

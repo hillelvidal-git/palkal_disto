@@ -86,6 +86,7 @@ namespace WideFieldBL
                 if (e.Message.Contains("Unique_WebID")) webidExists = true;
                 if (e.Message.Contains("Unique_Name")) nameExists = true;
                 msg = e.Message;
+                Console.WriteLine("error saving point: " + e.Message);
                 return false;
             }
             finally

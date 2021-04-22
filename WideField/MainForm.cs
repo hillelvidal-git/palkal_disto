@@ -102,7 +102,7 @@ namespace WideField
                         bool tilted = ((Math.Abs(o.point[0]) >= maxtilt)) || ((Math.Abs(o.point[1]) >= maxtilt));
                         if (o.point[0] == 0 && o.point[1] == 0 && o.point[2] == 0) tilted = true;
 
-                        Console.WriteLine("ui got titl data: titlted? " + tilted + "  (max: " + maxtilt + ")");
+                        //Console.WriteLine("ui got titl data: titlted? " + tilted + "  (max: " + maxtilt + ")");
                         tsTilted.BackColor = tilted ? Color.Red : Color.LawnGreen;
                         tsTilted.Text = tilted ? "המכשיר איננו מפולס" : "המכשיר מפולס";
                         this.bTpsTilted = tilted;
@@ -119,7 +119,7 @@ namespace WideField
                         if (o.val == "ok")
                         {
                             tsAction.Text = "הנקודה נמדדה בהצלחה";
-                            Console.WriteLine("point: " + o.point[0] + ", " + o.point[1] + ", " + o.point[2]);
+                            Console.WriteLine("[point: " + o.point[0] + ", " + o.point[1] + ", " + o.point[2]+"]");
                             string errorMsg;
                             WideFieldBL.DbPoint newPoint = CreateNewPoint(o.point);
                             if (SavePointToDB(newPoint, out errorMsg))
@@ -151,7 +151,10 @@ namespace WideField
                             short v = Convert.ToInt16(o.val);
                             BatteryCapacity = v;
                         }
-                        catch { }
+                        catch (Exception eb)
+                        {
+                            Console.WriteLine("cannot get bttery value: " + eb.Message);
+                        }
                         break;
                     case "lock on":
                         if (o.val == "ok") tsAction.Text = "מעקב הופעל בהצלחה";

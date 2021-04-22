@@ -21,7 +21,7 @@ namespace TpsAdapter
         bool IsConnected;
         Thread t;
         public List<Action> commandList;
-        const int KEEPALIVE_INTERVAL_MS = 1700;
+        const int KEEPALIVE_INTERVAL_MS = 2500;
 
         public Action<short> actBattery;
         public Action actAlive;
@@ -30,12 +30,11 @@ namespace TpsAdapter
         {
             //אתחול התקשורת
             commandList = new List<Action>();
-            Console.WriteLine("dll path: " + WrapperPath);
+            //Console.WriteLine("dll path: " + WrapperPath);
             nLastResponse = hv_COM_Init();
             short wait = 2; //2 seconds for communication timeout
             hv_COM_SetTimeOut(out wait);
             if (nLastResponse == 0) GeocomInitialized = true;
-
         }
 
         ~TpsAdapter()
@@ -54,12 +53,14 @@ namespace TpsAdapter
             IsRunning = true;
             commandList = new List<Action>();
             t = new Thread(Loop);
+            Console.WriteLine(">> New Thread started for TpsAdapter: " + t.ManagedThreadId);
             t.Start();
         }
 
         public void Stop()
         {
             IsRunning = false;
+            if (t!=null) Console.WriteLine(">> Stoping Thread of TpsAdapter: " + t.ManagedThreadId);
             hv_COM_End();
         }
 

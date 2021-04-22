@@ -255,6 +255,7 @@ namespace TpsAdapter
 
                 json = @"{cmd : 'measure', val: 'ok', res: " + nLastResponse + ", point: [" + Point3d[0] + ", " + Point3d[1] + ", " + Point3d[2] + "] }";
                 actReturned?.Invoke(json);
+                actAlive?.Invoke();
             });
         }
 
@@ -269,6 +270,7 @@ namespace TpsAdapter
                     nLastResponse = hv_AUT_FineAdjust(this.SearchRangeHz, this.SearchRangeV, BOOLE.FALSE); //חיפוש הפריזמה והתמקדות במרכזה
                     if (nLastResponse == 0)
                     {
+                        actAlive?.Invoke();
                         nLastResponse = hv_AUT_LockIn(); //נסה לנעול את המכשיר על הפריזמה
                         if (nLastResponse == 0)
                         {
@@ -306,6 +308,7 @@ namespace TpsAdapter
                 bool ok = nLastResponse == 0;
                 string json = @"{cmd : 'gotopoint', val: '" + ok.ToString() + "', res: " + nLastResponse + ", point: [] }";
                 actReturned?.Invoke(json);
+                if (ok) actAlive?.Invoke();
             });
         }
 
@@ -323,7 +326,7 @@ namespace TpsAdapter
                     Inclination[0] = PASS_GetX();
                     Inclination[1] = PASS_GetY();
                     Inclination[2] = PASS_GetZ();
-                    Console.WriteLine("tilt data recieved: [" + Inclination[0] + ", " + Inclination[1] + ", " + Inclination[2] + "]");
+                    //Console.WriteLine("tilt data recieved: [" + Inclination[0] + ", " + Inclination[1] + ", " + Inclination[2] + "]");
                 }
                 else
                 {
@@ -333,6 +336,7 @@ namespace TpsAdapter
 
                 string json = @"{cmd : 'tilt', val: 'ok', res: " + nLastResponse + ", point: [" + Inclination[0] + ", " + Inclination[1] + ", " + Inclination[2] + "] }";
                 actReturned?.Invoke(json);
+                actAlive?.Invoke();
             });
         }
     }

@@ -45,7 +45,7 @@ namespace WideFieldBL
             this.Modified = (DateTime)values[11];
             try
             {
-                this.WebID = (int)values[12];
+                if (values.Length > 12 && int.TryParse(values[12].ToString(), out int w)) this.WebID = w;
             }
             catch { }
         }

@@ -32,6 +32,8 @@ namespace WideFieldBL
         public int[] CurrentAttribution;
 
         bool tpsLastAlive;
+        DateTime tpsLastHeard;
+        double TpsAliveMaxIntervalMs = 8500;
 
         public Action actTpsAlive;
         public Action<string> actTpsReturned;
@@ -51,7 +53,7 @@ namespace WideFieldBL
             tps_port = tpsport;
 
             // Create a timer with a two second interval.
-            timerCheckTps = new System.Timers.Timer(4000);
+            timerCheckTps = new System.Timers.Timer(TpsAliveMaxIntervalMs);
             timerCheckTps.Elapsed += checkTpsConnection;
             timerCheckTps.AutoReset = true;
             timerCheckTps.Enabled = true;
@@ -65,10 +67,12 @@ namespace WideFieldBL
 
         private void checkTpsConnection(object sender, ElapsedEventArgs e)
         {
-            Console.WriteLine("check tps connection > alive? " + tpsLastAlive + " / connected? " + bTpsConnected);
+            //Console.WriteLine("check tps connection > alive? " + tpsLastAlive + " / connected? " + bTpsConnected);
 
             timerCheckTps.Stop();
-            bool alive = tpsLastAlive;
+            //bool alive = tpsLastAlive;
+            Double gap = (DateTime.Now - tpsLastHeard).TotalMilliseconds;
+            bool alive = gap <= TpsAliveMaxIntervalMs;
 
             actTpsConnectionStatus?.Invoke(alive, false);
 
@@ -77,13 +81,17 @@ namespace WideFieldBL
 
                 if (alive)
                 {
-                    Console.WriteLine("should be connected, and is actually alive, so nothing to do");
+                    //Console.WriteLine("should be connected, and is actually alive, so nothing to do");
+                    Console.WriteLine("------> Tps Blutooth OK. ("+gap+")");
                 }
                 else
                 {
                     //dispose tps object and thread  
-                    Console.WriteLine("should be connected, but it's not alive, so STOP");
-                    StopTps();
+                    //Console.WriteLine("should be connected, but it's not alive, so STOP");
+                    Console.WriteLine("------> Tps Blutooth Broken! Stopping connection. (" + gap + ")");
+                    DialogResult dr = MessageBox.Show("נראה שחיבור ה BLUETOOTH אבד. האם תרצו להתחבר שוב?", "בעיית תקשורת", MessageBoxButtons.YesNoCancel);
+                    
+                    if (dr== DialogResult.Yes) StopTps();
                 }                
             }
             else //sould be disconnected
@@ -91,7 +99,7 @@ namespace WideFieldBL
                 //try to reconnect tps                
                 if (this.try_to_connect)
                 {
-                    Console.WriteLine("try to stop then reconnect...");
+                    Console.WriteLine("------> Trying Recoonect Tps Bluetooth...");
                     StopTps();
                     ConnectTps(true, tps_port);
                 }
@@ -129,12 +137,14 @@ namespace WideFieldBL
         private void tpsAlive()
         {
             tpsLastAlive = true;
+            tpsLastHeard = DateTime.Now;
+            Console.WriteLine("*");
             actTpsAlive?.Invoke();
         }
 
         public void ConnectTps(bool conncet, string PortName)
         {
-            Console.WriteLine("func. connect > " + conncet);
+            //Console.WriteLine("func. connect > " + conncet);
 
             timerCheckTps.Stop();
 
@@ -142,12 +152,12 @@ namespace WideFieldBL
             {
                 Console.WriteLine("DISCONNECTING by request and setting [try = false]");
                 StopTps(); //stop and dispose tps object    
-                PortName = "";
+                //PortName = "";
                 this.try_to_connect = false;
             }
             else
             {
-                Console.WriteLine("try to coonect: " + PortName);
+                Console.WriteLine("trying to connect: " + PortName);
 
                 //אם זו בקשה להתחבר
                 this.try_to_connect = true;
@@ -173,7 +183,8 @@ namespace WideFieldBL
                             Console.WriteLine("CONNECTION SUCCEDDED");
                             this.bTpsConnected = true;
                             //החיבור עם היציאה הצליח
-                            tpsLastAlive = true;
+                            //tpsLastAlive = true;
+                            tpsAlive();
                             DistomatPort = strPortName;
                             success = true;
                             tps.Run();
@@ -1163,7 +1174,7 @@ namespace WideFieldBL
 
         public void StopTps()
         {
-            Console.WriteLine("func. stop tps");
+            Console.WriteLine("------> Stopping Tps Bluetooth Connection...");
             try
             {
                 actPrompt?.Invoke("מתנתק...");

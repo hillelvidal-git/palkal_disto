@@ -204,16 +204,28 @@ namespace TpsAdapter
                 hv_BMM_BeepAlarm();
             });
         }
-        public void cmdImportStation()
+        public void cmdImportStation(bool now = true)
         {
-            commandList.Add(() =>
+            if (now)
             {
                 hv_TMC_GetStation(out this.CurrentStation);
                 string json = @"{cmd : 'station', val: 'ok', res: " + nLastResponse + ", point: [] }";
                 actReturned?.Invoke(json);
                 return;
-            });
+            }
+            else
+            {
+                commandList.Add(() =>
+                {
+                    hv_TMC_GetStation(out this.CurrentStation);
+                    string json = @"{cmd : 'station', val: 'ok', res: " + nLastResponse + ", point: [] }";
+                    actReturned?.Invoke(json);
+                    return;
+                });
+            }
         }
+
+
 
         public void cmdMeasure(bool usePrism)
         {

@@ -204,7 +204,7 @@ namespace TpsAdapter
                 hv_BMM_BeepAlarm();
             });
         }
-        public void cmdImportStation(bool now = true)
+        public void cmdImportStation(bool now = false)
         {
             if (now)
             {

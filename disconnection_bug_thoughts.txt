@@ -1,0 +1,40 @@
+tps doisconnections:
+
+///////// this function determine if tps is connected or not:
+
+BL.checkTpsConnection { 
+    Double gap = (DateTime.Now - tpsLastHeard).TotalMilliseconds;
+    bool alive = gap <= TpsAliveMaxIntervalMs; //this criteria is 8.5 seconds
+    }
+
+
+///////// and what set tpsLastHeard? tpsAlive function
+
+BL.tpsAlive() { tpsLastHeard = DateTime.Now; }
+
+
+//////// and what calls tpsAlive function? 5 functions:
+
+1. when measure point complete
+2. when set-prism complete
+3. when pointing at target complete
+4. when check-tilt complete
+5. when get-battery completet
+--- this two last functions happens in KeepAlive function
+
+//////////// ok. what calls KeepAlaive? the loop functoin of TpsAdapter thread:
+
+if (swKeepAlive.ElapsedMilliseconds > KEEPALIVE_INTERVAL_MS) //every 2.5 seconds
+   {
+   swKeepAlive.Reset(); 
+   swKeepAlive.Start();
+   KeepAlive();
+   }
+
+>>>>>>> Possible Bus: before calling to KeepAlive, tpsAdapter sends all commands to tps, sleeping 250ms after each.
+Maybe it sometimes blocks KeepAlive from running for a significant time.
+Possible solution: Add KeepAlive call after each command
+
+
+
+

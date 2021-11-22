@@ -33,7 +33,7 @@ namespace WideFieldBL
 
         bool tpsLastAlive;
         DateTime tpsLastHeard;
-        double TpsAliveMaxIntervalMs = 8500;
+        double TpsAliveMaxIntervalMs = 12000;
 
         public Action actTpsAlive;
         public Action<string> actTpsReturned;
@@ -82,16 +82,17 @@ namespace WideFieldBL
                 if (alive)
                 {
                     //Console.WriteLine("should be connected, and is actually alive, so nothing to do");
-                    Console.WriteLine("------> Tps Blutooth OK. ("+gap+")");
+                    Console.WriteLine("------> Tps Connection OK. ("+gap+")");
                 }
                 else
                 {
                     //dispose tps object and thread  
                     //Console.WriteLine("should be connected, but it's not alive, so STOP");
-                    Console.WriteLine("------> Tps Blutooth Broken! Stopping connection. (" + gap + ")");
-                    DialogResult dr = MessageBox.Show("נראה שחיבור ה BLUETOOTH אבד. האם תרצו להתחבר שוב?", "בעיית תקשורת", MessageBoxButtons.YesNoCancel);
+                    Console.WriteLine("------> Tps Connection Broken! Stopping connection. (" + gap + ")");
+                    //DialogResult dr = MessageBox.Show("נראה שחיבור ה BLUETOOTH אבד. האם תרצו להתחבר שוב?", "בעיית תקשורת", MessageBoxButtons.YesNoCancel);
                     
-                    if (dr== DialogResult.Yes) StopTps();
+                    //if (dr== DialogResult.Yes) 
+                    StopTps();
                 }                
             }
             else //sould be disconnected
@@ -99,7 +100,7 @@ namespace WideFieldBL
                 //try to reconnect tps                
                 if (this.try_to_connect)
                 {
-                    Console.WriteLine("------> Trying Recoonect Tps Bluetooth...");
+                    Console.WriteLine("------> Trying Recoonect Tps...");
                     StopTps();
                     ConnectTps(true, tps_port);
                 }
@@ -138,7 +139,7 @@ namespace WideFieldBL
         {
             tpsLastAlive = true;
             tpsLastHeard = DateTime.Now;
-            Console.WriteLine("*");
+            Console.WriteLine(">> ALIVE <<");
             actTpsAlive?.Invoke();
         }
 

@@ -119,4 +119,4 @@ C:\Users\user\source\repos\palkal_disto\WideField\obj\x86\Debug\WideField.exe
 C:\Users\user\source\repos\palkal_disto\WideField\obj\x86\Debug\WideField.pdb
 C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\Newtonsoft.Json.dll
 C:\Users\user\source\repos\palkal_disto\WideField\bin\Debug\Newtonsoft.Json.xml
-C:\Users\user\source\repos\palkal_disto\WideField\obj\x86\Debug\WideField.csprojAssemblyReference.cache
+C:\Users\User\Source\Repos\palkal_disto\WideField\obj\x86\Debug\WideField.csprojAssemblyReference.cache

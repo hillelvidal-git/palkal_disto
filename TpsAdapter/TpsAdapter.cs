@@ -21,7 +21,8 @@ namespace TpsAdapter
         bool IsConnected;
         Thread t;
         public List<Action> commandList;
-        const int KEEPALIVE_INTERVAL_MS = 2500;
+        const int KEEPALIVE_INTERVAL_MS = 2500; 
+        const int CHECKTILT_INTERVAL_MS = 20000; 
 
         public Action<short> actBattery;
         public Action actAlive;
@@ -67,7 +68,10 @@ namespace TpsAdapter
         public void Loop()
         {
             Stopwatch swKeepAlive = new Stopwatch();
+            Stopwatch swCheckTilt = new Stopwatch();
+
             swKeepAlive.Start();
+            swCheckTilt.Start();
 
             while (IsRunning & IsConnected)
             {
@@ -77,6 +81,7 @@ namespace TpsAdapter
                     {
                         command.Invoke();
                         Thread.Sleep(250);
+                        KeepAlive(); swKeepAlive.Reset(); swKeepAlive.Start();
                     }
                     catch { }
                     commandList.Remove(command);
@@ -87,6 +92,13 @@ namespace TpsAdapter
                     swKeepAlive.Reset(); swKeepAlive.Start();
                     KeepAlive();
                     swKeepAlive.Reset(); swKeepAlive.Start();
+                }
+
+                if (swCheckTilt.ElapsedMilliseconds > CHECKTILT_INTERVAL_MS)
+                {
+                    Console.WriteLine("Check Tilt...");
+                    swCheckTilt.Reset(); swCheckTilt.Start();
+                    cmdCheckTilt();
                 }
 
                 Thread.Sleep(1);
@@ -102,13 +114,13 @@ namespace TpsAdapter
 
         private void KeepAlive()
         {
+            Console.WriteLine("Keep Alive...");
             GetBatteryPower(out short voltage); //מצב הסוללה)             
             string json = @"{cmd : 'battery', val: '" + voltage.ToString() + "', res: " + nLastResponse + ", point: [] }";            
             if (voltage > 0)
             {
                 actReturned?.Invoke(json); 
                 actAlive?.Invoke();
-                cmdCheckTilt();
             }
         }
 

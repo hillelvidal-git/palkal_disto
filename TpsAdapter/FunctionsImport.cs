@@ -326,30 +326,28 @@ namespace TpsAdapter
 
         public void cmdCheckTilt()
         {
-            commandList.Add(() =>
+            double[] Inclination = new double[3];
+
+            //קריאת נתוני הפלס מהמכשיר לתוך העוטף
+            nLastResponse = hv_TMC_GetTiltStatus();
+            if ((nLastResponse == 0) || (nLastResponse == 1285))
             {
-                double[] Inclination = new double[3];
-
-                //קריאת נתוני הפלס מהמכשיר לתוך העוטף
-                nLastResponse = hv_TMC_GetTiltStatus();
-                if ((nLastResponse == 0) || (nLastResponse == 1285))                
-                {
-                    //קריאת נתוני הפלס מהעוטף
-                    Inclination[0] = PASS_GetX();
-                    Inclination[1] = PASS_GetY();
-                    Inclination[2] = PASS_GetZ();
-                    //Console.WriteLine("tilt data recieved: [" + Inclination[0] + ", " + Inclination[1] + ", " + Inclination[2] + "]");
-                }
-                else
-                {
-                    //המדידה לא הצליחה
-                    Console.WriteLine("tilt data failed");
-                }
-
-                string json = @"{cmd : 'tilt', val: 'ok', res: " + nLastResponse + ", point: [" + Inclination[0] + ", " + Inclination[1] + ", " + Inclination[2] + "] }";
-                actReturned?.Invoke(json);
                 actAlive?.Invoke();
-            });
+                //קריאת נתוני הפלס מהעוטף
+                Inclination[0] = PASS_GetX();
+                Inclination[1] = PASS_GetY();
+                Inclination[2] = PASS_GetZ();
+                //Console.WriteLine("tilt data recieved: [" + Inclination[0] + ", " + Inclination[1] + ", " + Inclination[2] + "]");
+            }
+            else
+            {
+                //המדידה לא הצליחה
+                Console.WriteLine("tilt data failed");
+            }
+
+            string json = @"{cmd : 'tilt', val: 'ok', res: " + nLastResponse + ", point: [" + Inclination[0] + ", " + Inclination[1] + ", " + Inclination[2] + "] }";
+            actReturned?.Invoke(json);
+
         }
     }
 

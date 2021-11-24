@@ -114,7 +114,7 @@ namespace TpsAdapter
 
         private void KeepAlive()
         {
-            Console.WriteLine("Keep Alive...");
+            Console.WriteLine("Keep Alive... ["+ t.ManagedThreadId+"]");
             GetBatteryPower(out short voltage); //מצב הסוללה)             
             string json = @"{cmd : 'battery', val: '" + voltage.ToString() + "', res: " + nLastResponse + ", point: [] }";            
             if (voltage > 0)

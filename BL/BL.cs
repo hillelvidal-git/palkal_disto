@@ -33,7 +33,7 @@ namespace WideFieldBL
 
         bool tpsLastAlive;
         DateTime tpsLastHeard;
-        double TpsAliveMaxIntervalMs = 12000;
+        double TpsAliveMaxIntervalMs = 8000;
 
         public Action actTpsAlive;
         public Action<string> actTpsReturned;
@@ -140,6 +140,7 @@ namespace WideFieldBL
             tpsLastAlive = true;
             tpsLastHeard = DateTime.Now;
             Console.WriteLine(">> ALIVE <<");
+            timerCheckTps.Stop(); timerCheckTps.Start();
             actTpsAlive?.Invoke();
         }
 
@@ -1175,7 +1176,7 @@ namespace WideFieldBL
 
         public void StopTps()
         {
-            Console.WriteLine("------> Stopping Tps Bluetooth Connection...");
+            Console.WriteLine("------> Stopping Tps Connection...");
             try
             {
                 actPrompt?.Invoke("מתנתק...");

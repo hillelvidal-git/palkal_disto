@@ -31,7 +31,7 @@ if (swKeepAlive.ElapsedMilliseconds > KEEPALIVE_INTERVAL_MS) //every 2.5 seconds
    KeepAlive();
    }
 
->>>>>>> Possible Bus: before calling to KeepAlive, tpsAdapter sends all commands to tps, sleeping 250ms after each.
+>>>>>>> Possible Bug: before calling to KeepAlive, tpsAdapter sends all commands to tps, sleeping 250ms after each.
 Maybe it sometimes blocks KeepAlive from running for a significant time.
 Possible solution: Add KeepAlive call after each command
 

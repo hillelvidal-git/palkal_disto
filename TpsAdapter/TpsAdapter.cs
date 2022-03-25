@@ -127,13 +127,17 @@ namespace TpsAdapter
         public bool Connect(int Port, int Baudrate, int Retries)
         {
             //נסיון לפתיחת החיבור עם הדיסטומט
-            short to = 1000;
-            hv_COM_End();
+            short to = 3000;
+            //hv_COM_End();
+            //Thread.Sleep(1500);
             nLastResponse = hv_COM_Init();
+            Console.WriteLine("InitConnection Returned: " + nLastResponse);
+            Thread.Sleep(1500);
             hv_COM_SetTimeOut(out to);
             COM_PORT ePort = (COM_PORT)(Port - 1);
             nLastResponse = hv_COM_OpenConnection(ePort, (COM_BAUD_RATE.COM_BAUD_115200), (short)Retries);
 
+            Console.WriteLine("OpenConnection Returned: " + nLastResponse);
             IsConnected = (nLastResponse == 0);
             return IsConnected;
         }

@@ -50,4 +50,4 @@ C:\Users\user\source\repos\palkal_disto\BL\bin\Debug\BL.pdb
 C:\Users\user\source\repos\palkal_disto\BL\bin\Debug\TpsAdapter.dll
 C:\Users\user\source\repos\palkal_disto\BL\bin\Debug\TpsAdapter.pdb
 C:\Users\user\source\repos\palkal_disto\BL\obj\Debug\WideFieldBL.csproj.CopyComplete
-C:\Users\user\source\repos\palkal_disto\BL\obj\Debug\WideFieldBL.csprojAssemblyReference.cache
+C:\Users\User\Source\Repos\palkal_disto\BL\obj\Debug\WideFieldBL.csprojAssemblyReference.cache

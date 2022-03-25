@@ -140,8 +140,9 @@ namespace WideFieldBL
             tpsLastAlive = true;
             tpsLastHeard = DateTime.Now;
             Console.WriteLine(">> ALIVE <<");
+            actTpsConnectionStatus?.Invoke(true, false);
             timerCheckTps.Stop(); timerCheckTps.Start();
-            actTpsAlive?.Invoke();
+            //actTpsAlive?.Invoke();
         }
 
         public void ConnectTps(bool conncet, string PortName)
@@ -180,6 +181,8 @@ namespace WideFieldBL
 
                     try
                     {
+                        Console.WriteLine("Connect to " + strPortName + "...");
+
                         if (tps.Connect(Convert.ToInt16(strPortName), 115200, 1))
                         {
                             Console.WriteLine("CONNECTION SUCCEDDED");

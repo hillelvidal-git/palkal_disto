@@ -78,7 +78,7 @@ namespace WideField
             InitializeComponent();
             this.chkChekLevel.Checked = false;
             this.myBL = new WideFieldBL.BL("COM" + nudPortName.Value.ToString());
-            myBL.actTpsAlive += tpsAliveIndicator;
+            //myBL.actTpsAlive += tpsAliveIndicator;
             myBL.actTpsReturned += tpsReturned;
             myBL.actTpsConnectionStatus += tpsConnectionStatus;
             myBL.actPrompt += Prompt;
@@ -103,8 +103,8 @@ namespace WideField
                         if (o.point[0] == 0 && o.point[1] == 0 && o.point[2] == 0) tilted = true;
 
                         //Console.WriteLine("ui got titl data: titlted? " + tilted + "  (max: " + maxtilt + ")");
-                        tsTilted.BackColor = tilted ? Color.Red : Color.LawnGreen;
-                        tsTilted.Text = tilted ? "המכשיר איננו מפולס" : "המכשיר מפולס";
+                        tsTilted.BackColor = tilted ? Color.PaleVioletRed : Color.LawnGreen;
+                        tsTilted.Text = tilted ? "    המכשיר איננו מפולס    " : "    המכשיר מפולס    ";
                         this.bTpsTilted = tilted;
                                              
 
@@ -284,9 +284,12 @@ namespace WideField
 
         void ToggleTpsGui(bool connected)
         {
+            //connected = connected || forceConnected;
             if (IsHandleCreated) Invoke((MethodInvoker)delegate
             {
                 //setConnectionBtnState(connected);
+                statusStrip1.BackColor = connected ? Color.LawnGreen : Color.Gray;
+                toolStripStatusLabel4.Visible = connected;
 
                 chkRedLaser.Enabled = connected;
                 chkTrack.Enabled = connected;
@@ -295,7 +298,7 @@ namespace WideField
                 chkReflectorLess.Enabled = connected;
                 chkAccuracy.Enabled = connected;
                 btnDoMeasure.Enabled = connected;
-                btnMeasureBs.Enabled = connected;
+                //btnMeasureBs.Enabled = connected;
                 btnSetStation.Enabled = connected;
                 btnImportStation.Enabled = connected;
                 btnImportStation.Enabled = connected;
@@ -304,22 +307,26 @@ namespace WideField
                 tsBatteryLabel.Visible = connected;
                 tsTilted.Visible = connected;
 
+                btnMeasureBs.Enabled = true;
+
                 //tsAction.Text = connected ? "מחובר לדיסטומט" : "מנותק";
 
                 if (connected)
                 {
-                    tsTpsAlive.BackColor = Color.Yellow;
+                    Console.WriteLine("Toogle GUI > CONNECTED!");
+                    //tsTpsAlive.BackColor = Color.Yellow;
                     chkRedLaser.Checked = true; //לאחר חיבור נסה להפעיל את ציין הלייזר
                     chkReflectorLess.Checked = true;
                 }
                 else
                 {
+                    Console.WriteLine("Toogle GUI > DISCONNECTED!");
                     chkTrack.Checked = false;
                     chkPrism.Checked = false;
                     chkAutoTarget.Checked = false;
                     chkReflectorLess.Checked = false;
-                    tsTpsAlive.BackColor = Color.Red;
-                    timerTpsAliveFade.Stop(); //stay red...
+                    //tsTpsAlive.BackColor = Color.Red;
+                    //timerTpsAliveFade.Stop(); //stay red...
                 }
 
                 was_alive = connected;
@@ -1273,7 +1280,7 @@ namespace WideField
             try
             {
                 myBL.StopTps();
-                myBL.actTpsAlive -= tpsAliveIndicator;
+                //myBL.actTpsAlive -= tpsAliveIndicator;
                 myBL.actTpsReturned -= tpsReturned;
                 myBL.actTpsConnectionStatus -= tpsConnectionStatus;
                 myBL.actPrompt -= Prompt;
@@ -1681,24 +1688,24 @@ namespace WideField
 
             if (IsHandleCreated) Invoke((MethodInvoker)delegate
             {
-                timerFadeTpsChecking.Stop();
-                tsTpsCheck.BackColor = Color.Red;
-                tps_check_fade_counter = 0;
-                timerFadeTpsChecking.Start();
+                //timerFadeTpsChecking.Stop();
+                //tsTpsCheck.BackColor = Color.Red;
+                //tps_check_fade_counter = 0;
+                //timerFadeTpsChecking.Start();
 
                 if (!force && (was_alive == alive)) return; //no change
 
                 if (alive)
                 {
                     ToggleTpsGui(true); //עדכן מצב - מחובר
-                    tsAction.Text = "המכשיר מחובר.";
+                    //tsAction.Text = "המכשיר מחובר.";
                     try { myBL.SaveComPort((int)nudPortName.Value); }
                     catch { }
                 }
                 else
                 {
                     ToggleTpsGui(false); //עדכן מצב - מנותק
-                    tsAction.Text = "המכשיר מנותק.";
+                    //tsAction.Text = "המכשיר מנותק.";
                 }
 
             });
@@ -1720,5 +1727,10 @@ namespace WideField
                 tsTpsCheck.BackColor = Color.FromArgb(255, tps_check_fade_counter, tps_check_fade_counter);
             }
         }
+
+        bool forceConnected = false;
+        
+
+        
     } //Class
 } //Namespace

@@ -33,7 +33,7 @@ namespace WideFieldBL
 
         bool tpsLastAlive;
         DateTime tpsLastHeard;
-        double TpsAliveMaxIntervalMs = 8000;
+        double TpsAliveMaxIntervalMs = 30000;
 
         public Action actTpsAlive;
         public Action<string> actTpsReturned;
